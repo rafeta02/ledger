@@ -52,7 +52,9 @@ $(document).ready(function() {
   $('#addDebet').click(function(){
     a++;
 
-    $('#tableDebet').append('<tr id="rowdebet'+a+'"><td><select class="form-control select2" name="namadebet[]" data-placeholder="Choose Chart Of Account ..." required><option></option>@foreach($coas as $coa)<option value="{{$coa->id}}">{{$coa->code}}-{{$coa->name}}</option>@endforeach</select></td><td><input id="debet'+a+'" type="number" value="0" min="0" data-parsley-type="number" name="debet[]" placeholder="Enter Debet Amount" class="form-control" required="" onkeyup="inputDebet()" /></td><td><button type="button" name="remove" id="'+a+'" class="btn btn-danger btnDebet_remove">X</button></td></tr>');
+    $('#tableDebet').append('<tr id="rowdebet'+a+'"><td><select id="debetSelect'+a+'" class="form-control" name="namadebet[]" data-placeholder="Choose Chart Of Account ..." required><option></option>@foreach($coas as $coa)<option value="{{$coa->id}}">{{$coa->code}}-{{$coa->name}}</option>@endforeach</select></td><td><input id="debet'+a+'" type="number" value="0" min="0" data-parsley-type="number" name="debet[]" placeholder="Enter Debet Amount" class="form-control" required="" onkeyup="inputDebet()" /></td><td><button type="button" name="remove" id="'+a+'" class="btn btn-danger btnDebet_remove">X</button></td></tr>');
+
+    $('#debetSelect'+a+'').select2();
   });
    
   $(document).on('click', '.btnDebet_remove', function(){
@@ -65,7 +67,9 @@ $(document).ready(function() {
   $('#addKredit').click(function(){
     b++;
 
-    $('#tableKredit').append('<tr id="rowkredit'+b+'"><td><select class="form-control select2" name="namakredit[]" data-placeholder="Choose Chart Of Account ..." required><option></option>@foreach($coas as $coa)<option value="{{$coa->id}}">{{$coa->code}}-{{$coa->name}}</option>@endforeach</select></td><td><input id="kredit'+b+'" type="number" value="0" min="0" data-parsley-type="number" name="kredit[]" placeholder="Enter Kredit Amount" class="form-control" required="" onkeyup="inputKredit()" /></td><td><button type="button" name="remove" id="'+b+'" class="btn btn-danger btnKredit_remove">X</button></td></tr>');
+    $('#tableKredit').append('<tr id="rowkredit'+b+'"><td><select class="form-control" id="kreditSelect'+b+'" name="namakredit[]" data-placeholder="Choose Chart Of Account ..." required><option></option>@foreach($coas as $coa)<option value="{{$coa->id}}">{{$coa->code}}-{{$coa->name}}</option>@endforeach</select></td><td><input id="kredit'+b+'" type="number" value="0" min="0" data-parsley-type="number" name="kredit[]" placeholder="Enter Kredit Amount" class="form-control" required="" onkeyup="inputKredit()" /></td><td><button type="button" name="remove" id="'+b+'" class="btn btn-danger btnKredit_remove">X</button></td></tr>');
+
+    $('#kreditSelect'+b+'').select2();
   });
   
   $(document).on('click', '.btnKredit_remove', function(){
