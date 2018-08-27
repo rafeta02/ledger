@@ -44,6 +44,10 @@ Route::post('/journal/import', 'JournalController@importPost')->name('journal.im
 
 Route::resource('journal', 'JournalController');
 
+Route::resource('/setup/neraca', 'SetupNeracaController')->except([
+	'view', 'destroy'
+]);
+
 
 
 

@@ -1,11 +1,11 @@
 @extends('layouts.master')
 
 @section('tab-title')
-<title>Accounting - Journal</title>
+<title>Accounting - Setup</title>
 @endsection
 
 @section('page-title')
-<h3 class="page-title">Create New Journal</h3>
+<h3 class="page-title">Create New Setup Neraca</h3>
 @endsection
 
 @section('head')
@@ -27,79 +27,34 @@
 @section('custom-scripts')
 <script type="text/javascript">
 
-var nf = Intl.NumberFormat();
-var a= 0;
-var b= 0;
-
-$('.selectpicker').selectpicker();
+var dapatC = 0;
+var keluarC = 0;
 
 $(".select2").select2();
 
 $(document).ready(function() {
   $('form').parsley();
 
-  inputDebet();
-  inputKredit();
+  $(document).on("click", "#addDapat", function() {
+    dapatC++;
 
-  $('#date').datepicker({
-    format: 'yyyy-mm-dd',
-    autoclose: true,
-    todayHighlight: true,
-  });
+    $('#tableDapat').append('<tr id="rowdapat'+dapatC+'"><td><select class="form-control" name="namadapat[]" id="dapatselect'+dapatC+'" data-placeholder="Choose Type Chart Of Account ..." required><option></option>@foreach($typeDebets as $type)<option value="{{$type->id}}">{{$type->name}}</option>@endforeach</select></td><td><button type="button" name="remove" id="'+dapatC+'" class="btn btn-danger btnDapat_remove">X</button></td></tr>');
 
-  $('#date').datepicker('setDate', 'today');
-
-  $('#addDebet').click(function(){
-    a++;
-
-    $('#tableDebet').append('<tr id="rowdebet'+a+'"><td><select class="form-control select2" name="namadebet[]" data-placeholder="Choose Chart Of Account ..." required><option></option>@foreach($coas as $coa)<option value="{{$coa->id}}">{{$coa->code}}-{{$coa->name}}</option>@endforeach</select></td><td><input id="debet'+a+'" type="number" value="0" min="0" data-parsley-type="number" name="debet[]" placeholder="Enter Debet Amount" class="form-control" required="" onkeyup="inputDebet()" /></td><td><button type="button" name="remove" id="'+a+'" class="btn btn-danger btnDebet_remove">X</button></td></tr>');
+    $('#dapatselect'+dapatC+'').select2();
   });
    
-  $(document).on('click', '.btnDebet_remove', function(){
+  $(document).on('click', '.btnDapat_remove', function(){
     var button_id = $(this).attr("id"); 
-    $('#rowdebet'+button_id+'').remove();
+    $('#rowdapat'+button_id+'').remove();
     a--;
-    inputDebet();
-  });
-
-  $('#addKredit').click(function(){
-    b++;
-
-    $('#tableKredit').append('<tr id="rowkredit'+b+'"><td><select class="form-control select2" name="namakredit[]" data-placeholder="Choose Chart Of Account ..." required><option></option>@foreach($coas as $coa)<option value="{{$coa->id}}">{{$coa->code}}-{{$coa->name}}</option>@endforeach</select></td><td><input id="kredit'+b+'" type="number" value="0" min="0" data-parsley-type="number" name="kredit[]" placeholder="Enter Kredit Amount" class="form-control" required="" onkeyup="inputKredit()" /></td><td><button type="button" name="remove" id="'+b+'" class="btn btn-danger btnKredit_remove">X</button></td></tr>');
-  });
-  
-  $(document).on('click', '.btnKredit_remove', function(){
-    var button_id = $(this).attr("id"); 
-    $('#rowkredit'+button_id+'').remove(); 
-    b--;
-    inputKredit();
   });
 
 });
-
-function inputDebet(){
-  var i;
-  var totaldebet = 0;
-  for (i = 0; i <= a; i++) { 
-      totaldebet += parseInt($('#debet'+i).val());
-  }
-  console.log(nf.format(totaldebet));
-  $('#totaldebet').val(totaldebet);
-}
-
-function inputKredit(){
-  var i;
-  var totalkredit = 0;
-  for (i = 0; i <= b; i++) { 
-      totalkredit += parseInt($('#kredit'+i).val());
-  }
-  $('#totalkredit').val(totalkredit);
-}
 </script>
 @endsection
 
 @section('content')
-<section CREATE NEW JOURNAL>
+<section SETUP NERACA>
   <br>
   <div class="row">
     <div class="col-sm-12">
@@ -109,44 +64,24 @@ function inputKredit(){
             <form class="form-horizontal group-border-dashed" action="{{route('journal.store')}}" method="post">
               {{csrf_field()}}
               <div class="form-group">
-                <label class="col-sm-2 col-sm-offset-1 control-label" style="text-align: left;">Journal Date</label>
-                <div class="col-sm-4">
-                  <input type="text" id="date" name="date" class="form-control" required="" placeholder="Journal Date" />
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="col-sm-2 col-sm-offset-1 control-label" style="text-align: left;">Description</label>
-                <div class="col-sm-8">
-                   <textarea name="description" class="form-control" rows="5" required=""></textarea>
-                </div>
-              </div>
-              <div class="form-group">
                 <div class="col-sm-10 col-sm-offset-1">
                   <div class="panel panel-color panel-info">
                     <div class="panel-heading">
-                      <h3 class="panel-title">DEBET</h3>
+                      <h3 class="panel-title">PENDAPATAN</h3>
                     </div>
                     <div class="panel-body">
                       <div class="table-responsive">
-                        <table class="table table-bordered" id="tableDebet">
-                          <tr id="rowdebet0">
+                        <table class="table table-bordered" id="tableDapat">
+                          <tr id="rowdapat0">
                             <td>
-                              <select class="form-control select2" name="namadebet[]" data-placeholder="Choose Chart Of Account ..." required>
+                              <select class="form-control select2" name="namadapat[]" data-placeholder="Choose Type Chart Of Account ..." required>
                                 <option></option>
-                                @foreach($coas as $coa)
-                                  <option value="{{$coa->id}}">{{$coa->code}}-{{$coa->name}}</option>
+                                @foreach($typeDebets as $type)
+                                  <option value="{{$type->id}}">{{$type->name}}</option>
                                 @endforeach
                               </select>
                             </td>
-                            <td><input id="debet0" type="number" value="0" min="0" data-parsley-type="number" name="debet[]" placeholder="Enter Debet Amount" class="form-control" required="" onkeyup="inputDebet()" /></td>
-                            <td width="10%"><button type="button" name="addDebet" id="addDebet" class="btn btn-success">+</button></td>
-                          </tr>  
-                        </table>
-                        <table class="table">
-                          <tr>
-                            <td width="45%" align="right"><strong style="font-size: 20px;">Total : </strong></td>
-                            <td width="45%" align="right"><strong style="font-size: 20px;">Rp. <input id="totaldebet" name="totaldebet" type="number" value="0" min="0" data-parsley-equalto="#totalkredit" readonly="" style="text-align: right;" /></strong></td>
-                            <td width="10%"></td>
+                            <td width="10%"><button type="button" name="addDapat" id="addDapat" class="btn btn-success">+</button></td>
                           </tr>  
                         </table>
                       </div> 
@@ -158,7 +93,7 @@ function inputKredit(){
                 <div class="col-sm-10 col-sm-offset-1">
                   <div class="panel panel-color panel-danger">
                     <div class="panel-heading">
-                      <h3 class="panel-title">KREDIT</h3>
+                      <h3 class="panel-title">PENGELUARAN</h3>
                     </div>
                     <div class="panel-body">
                       <div class="table-responsive">
@@ -167,9 +102,7 @@ function inputKredit(){
                             <td>
                               <select class="form-control select2" name="namakredit[]" data-placeholder="Choose Chart Of Account ..." required>
                                 <option></option>
-                                @foreach($coas as $coa)
-                                  <option value="{{$coa->id}}">{{$coa->code}}-{{$coa->name}}</option>
-                                @endforeach
+
                               </select>
                             </td>
                             <td><input id="kredit0" type="number" value="0" min="0" data-parsley-type="number" name="kredit[]" placeholder="Enter Kredit Amount" class="form-control" required="" onkeyup="inputKredit()" /></td>
