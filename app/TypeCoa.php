@@ -15,4 +15,8 @@ class TypeCoa extends Model
     public function coas(){
     	return $this->hasMany('App\Coa', 'coa_id');
     }
+
+    public function setup_details(){
+    	return $this->hasMany(SetupDetail::class, 'setup_id');
+    }
 }

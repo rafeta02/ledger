@@ -27,9 +27,9 @@
 @section('custom-scripts')
 <script type="text/javascript">
 
-var dapatC = 0;
-var keluarC = 0;
-var lainC = 0;
+var dapatC = {{$dapats->setup_details->count()}};
+var keluarC = {{$keluars->setup_details->count()}};
+var lainC = {{$lains->setup_details->count()}};
 
 $(".select2").select2();
 
@@ -102,17 +102,30 @@ $(document).ready(function() {
                     <div class="panel-body">
                       <div class="table-responsive">
                         <table class="table table-bordered" id="tableDapat">
-                          <tr id="rowdapat0">
+                          @php
+                            $a = 0;
+                          @endphp
+                          @foreach($dapats->setup_details as $key=>$value)
+                          <tr id="rowdapat{{$a}}">
                             <td>
+                              <input type="hidden" name="detailsetup[]" value="{{$value->id}}">
                               <select class="form-control select2" name="typedapat[]" data-placeholder="Choose Type Chart Of Account ..." required>
-                                <option></option>
                                 @foreach($typeDebets as $type)
                                   <option value="{{$type->id}}">{{$type->name}}</option>
+                                  <option value="{{$type->id}}" {{($type->id == $value->typecoa_id) ? 'selected':''}}>{{$type->name}}</option>
                                 @endforeach
                               </select>
                             </td>
-                            <td width="10%"><button type="button" name="addDapat" id="addDapat" class="btn btn-success">+</button></td>
-                          </tr>  
+                            @if($a == 0)
+                              <td width="10%"><button type="button" name="addDapat" id="addDapat" class="btn btn-success">+</button></td>
+                            @else
+                              <button type="button" name="remove" id="{{$a}}" class="btn btn-danger btnDapat_remove">X</button>
+                            @endif
+                          </tr>
+                          @php
+                            $a++;
+                          @endphp
+                          @endforeach  
                         </table>
                       </div> 
                     </div>
