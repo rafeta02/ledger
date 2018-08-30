@@ -84,56 +84,5 @@ $(document).ready(function() {
       </div>
     </div>
   </div>
-  <div class="row">
-    <div class="col-sm-12">
-      <div class="card-box">
-        <table data-toggle="table" class="table-bordered">
-        <thead>
-          <tr>
-            <th data-field="period" data-sortable="true" class="text-center" rowspan="2">Period</th>
-            <th data-field="coa" data-sortable="true" class="text-center" rowspan="2">Chart Of Account</th>
-            <th data-field="opening" class="text-center" colspan="2">Opening Balance</th>
-            <th data-field="debet" class="text-center" rowspan="2">Total Debet</th>
-            <th data-field="kredit" class="text-center" rowspan="2">Total Kredit</th>
-            <th class="text-center" colspan="2">Closing Balance</th>
-          </tr>
-          <tr>
-            <th data-field="openingdebet" class="text-center">Debet</th>
-            <th data-field="openingkredit" class="text-center">Kredit</th>
-            <th data-field="closingdebet" class="text-center">Debet</th>
-            <th data-field="closingkredit" class="text-center">Kredit</th>
-          </tr>
-        </thead>
-        <tbody>
-          @foreach($ledgers as $ledger)
-          <tr>
-            <td>{{$ledger->period}}</td>
-            <td class="text-left">{{$ledger->coa->code}} - {{$ledger->coa->name}}</td>
-            @if($ledger->opening_balance >= 0)
-              <td class="text-right">{{number_format($ledger->opening_balance,0,",", ".")}}</td>
-              <td></td>
-            @else
-              <td></td>
-              <td class="text-right">{{number_format(abs($ledger->opening_balance),0,",", ".")}}</td>
-            @endif
-            <td class="text-right">{{number_format($ledger->debet_total,0,",", ".")}}</td>
-            <td class="text-right">{{number_format($ledger->kredit_total,0,",", ".")}}</td>
-            @if($ledger->closing_balance >= 0)
-              <td class="text-right">{{number_format($ledger->closing_balance,0,",", ".")}}</td>
-              <td></td>
-            @else
-              <td></td>
-              <td class="text-right">{{number_format(abs($ledger->closing_balance),0,",", ".")}}</td>
-            @endif
-          </tr>
-          @endforeach
-        </tbody>
-      </table>
-      <div class="text-center"> 
-        {{ $ledgers->links() }}
-      </div>
-    </div>
-  </div>
-  </div>
 </section LEDGER INDEX>
 @endsection

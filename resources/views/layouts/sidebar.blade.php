@@ -23,7 +23,26 @@
         </li>
 
         <li class="has_sub">
-          <a href="{{route('ledger.index')}}" class="waves-effect"><i class="ti-credit-card"></i><span> General Ledger </span></a>
+          <a class="waves-effect"><i class="ti-credit-card"></i><span> General Ledger </span><span class="menu-arrow"></span></a>
+          <ul class="list-unstyled">
+            <li><a href="{{route('ledger.index')}}">Ledger</a></li>
+            <li><a href="{{route('ledger.monthly')}}">Summary</a></li>
+          </ul>
+        </li>
+
+        <li class="has_sub">
+          <a href="{{route('labarugi.index')}}" class="waves-effect"><i class="ti-credit-card"></i><span> Labarugi </span></a>
+        </li>
+        <li class="has_sub">
+          <a href="{{route('neraca.index')}}" class="waves-effect"><i class="ti-credit-card"></i><span> Neraca </span></a>
+        </li>
+
+        <li class="has_sub">
+          <a class="waves-effect"><i class=" ti-settings"></i><span> Setup </span> <span class="menu-arrow"></span></a>
+          <ul class="list-unstyled">
+            <li><a href="{{route('setup.labarugi.index')}}">Setup Labarugi</a></li>
+            <li><a href="{{route('setup.neraca.index')}}">Setup Neraca</a></li>
+          </ul>
         </li>
       </ul>
       <div class="clearfix"></div>

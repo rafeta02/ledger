@@ -25,6 +25,7 @@ Route::get('/ledger', 'LedgerController@index')->name('ledger.index');
 Route::post('/ledger', 'LedgerController@store')->name('ledger.store');
 Route::get('/ledger/export', 'LedgerController@export')->name('ledger.export');
 Route::get('/ledger/view', 'LedgerController@view')->name('ledger.view');
+Route::get('/ledger/current', 'LedgerController@monthly')->name('ledger.monthly');
 
 Route::resource('type-coa', 'TypecoaController')->except([
 	'view'
@@ -44,9 +45,17 @@ Route::post('/journal/import', 'JournalController@importPost')->name('journal.im
 
 Route::resource('journal', 'JournalController');
 
-Route::resource('/setup/neraca', 'SetupNeracaController')->except([
-	'view', 'destroy'
+Route::resource('/setup/neraca', 'SetupNeracaController', ['as' => 'setup'])->only([
+	'index', 'store',
 ]);
+Route::resource('/setup/labarugi', 'SetupLabarugiController', ['as' => 'setup'])->only([
+	'index', 'store',
+]);
+
+Route::resource('neraca', 'NeracaController');
+Route::resource('labarugi', 'LabarugiController');
+
+
 
 
 

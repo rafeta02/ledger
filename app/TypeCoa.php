@@ -13,7 +13,7 @@ class TypeCoa extends Model
 	protected $dates = ['deleted_at'];
 
     public function coas(){
-    	return $this->hasMany('App\Coa', 'coa_id');
+    	return $this->hasMany(Coa::class, 'type_id');
     }
 
     public function setup_details(){

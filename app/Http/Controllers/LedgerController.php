@@ -21,8 +21,60 @@ class LedgerController extends Controller
     public function index()
     {
         $coas = Coa::orderBy('code')->get();
-        $ledgers = Ledger::orderBy('period', 'desc')->paginate(15);
+        //$ledgers = Ledger::orderBy('period', 'desc')->paginate(15);
         return view('pages.ledger.ledger_index', compact('coas', 'ledgers'));
+    }
+
+    public function monthly(){
+        $karbon = Carbon::now();
+        $periodBefore = $karbon->subMonth(1)->format('Y-m');
+        $now = Carbon::now();
+        $periodNow = $now->format('Y-m');
+        $like = $periodNow."-%";
+        $periodText = $now->format('F Y');
+
+        $coas = Coa::orderBy('code')->paginate(15);
+
+        //dd($coas);
+        foreach ($coas as $coa) {
+            $coa = Coa::find($coa->id);
+            $ledger = Ledger::where('period', $periodBefore)->where('coa_id', $coa->id)->first();
+            if($ledger == null){
+                continue;
+            }else{
+                $opening_balance = $ledger->closing_balance;
+            }
+            //dd($coa);
+            $coa_id[] = $coa->id;
+
+            if($coa->children != null){
+                foreach ($coa->children as $key => $value) {
+                    $coa_id[] = $value->id;
+                }
+            }
+
+            $ledger = Ledger::where('period', $periodBefore)->where('coa_id', $coa->id)->first();
+            if($ledger == null){
+                $opening_balance = 0;
+            }else{
+                $opening_balance = $ledger->closing_balance;
+            }
+                
+            $details =  JournalDetail::whereHas('journal', function ($q) use ($like) {
+                        $q->where('date', 'like', $like)->isPosted();
+                    })->whereIn('coa_id', $coa_id)->get();
+
+            
+            $debet = $details->sum('debet');
+            $kredit = $details->sum('kredit');
+            $saldo = $opening_balance + ($details->sum('debet') - $details->sum('kredit'));
+            $current[$coa->id] = array($opening_balance, $debet, $kredit, $saldo);
+            unset($coa_id);
+        }
+        //dd($current);
+        $ledgers = Ledger::where('period', $periodNow)->pluck('closing_balance', 'coa_id');
+        //dd($ledgers[1]);
+        return view('pages.ledger.ledger_view_monthly', compact('periodText','periodNow', 'coas', 'current', 'ledgers'));
     }
 
     public function view(Request $request)
@@ -57,7 +109,12 @@ class LedgerController extends Controller
         $details =  JournalDetail::whereHas('journal', function ($q) use ($like) {
                     $q->where('date', 'like', $like)->isPosted();
                 })->whereIn('coa_id', $coa_id)->get();
-        
+
+        $opening = $ledger->closing_balance; 
+        $debet = $details->sum('debet');
+        $kredit = $details->sum('kredit');
+        $a = $opening + ($debet - $kredit);
+        //dd($a);        
         return view('pages.ledger.ledger_view', compact('details', 'coa', 'coas', 'ledger', 'periodText', 'periodFilter'));
     }
 
@@ -154,8 +211,8 @@ class LedgerController extends Controller
      */
     public function store(Request $request)
     {
-        //dd($request->debet_total);
-        $ledger = Ledger::where('period', $request->period)->where('coa_id')->first();
+        //dd($request->all());
+        $ledger = Ledger::where('period', $request->period)->where('coa_id', $request->coa_id)->first();
         if($ledger != null){
             $ledger->debet_total = $request->debet_total;
             $ledger->kredit_total = $request->kredit_total;

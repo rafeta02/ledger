@@ -16,26 +16,18 @@ class SetupNeracaController extends Controller
      */
     public function index()
     {
-        $types = TypeCoa::orderBy('name')->get();
         $typeDebets = TypeCoa::where('value', 'Debet')->orderBy('name')->get();
         $typeKredits = TypeCoa::where('value', 'Kredit')->orderBy('name')->get();
 
-        $dapats =  Setup::with('setup_details')->where('name', 'Labarugi')->where('list', 'Pendapatan_Usaha')->first();
-        $keluars = Setup::with('setup_details')->where('name', 'Labarugi')->where('list', 'Beban_Usaha')->first();
-        $lains = Setup::with('setup_details')->where('name', 'Labarugi')->where('list', 'Pendapatan_Beban_Lainnya')->first();
-        $pajak = Setup::with('setup_details')->where('name', 'Labarugi')->where('list', 'Beban_Pajak')->first();
+        $debets =  Setup::with('setup_details')->where('name', 'Neraca')->where('list', 'Aktiva')->first();
+        $kredits = Setup::with('setup_details')->where('name', 'Neraca')->where('list', 'Kewajiban_Ekuitas')->first();
 
-        return view('setup.neraca_edit', compact('typeDebets', 'typeKredits', 'types', 'dapats', 'keluars', 'lains', 'pajak'));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        if(($debets->setup_details->isEmpty()) OR ($kredits->setup_details->isEmpty()))
+        {
+            return view('setup.neraca_create', compact('typeDebets', 'typeKredits'));
+        }else{
+             return view('setup.neraca_edit', compact('typeDebets', 'typeKredits', 'debets', 'kredits'));
+        }
     }
 
     /**
@@ -46,32 +38,25 @@ class SetupNeracaController extends Controller
      */
     public function store(Request $request)
     {
-        $dapat = array_unique($request->typedapat);
-        $keluar = array_unique($request->typekeluar);
-        $lain = array_unique($request->typelain);
-        $pajak = $request->typepajak; 
+        //dd($request->all());
+        $debet = array_unique($request->typedebet);
+        $kredit = array_unique($request->typekredit);
 
-        $dapat_id =  Setup::where('name', 'Labarugi')->where('list', 'Pendapatan_Usaha')->first();
-        $keluar_id = Setup::where('name', 'Labarugi')->where('list', 'Beban_Usaha')->first();
-        $lain_id = Setup::where('name', 'Labarugi')->where('list', 'Pendapatan_Beban_Lainnya')->first();
-        $pajak_id = Setup::where('name', 'Labarugi')->where('list', 'Beban_Pajak')->first();
+        $debet_id =  Setup::where('name', 'Neraca')->where('list', 'Aktiva')->first();
+        $kredit_id = Setup::where('name', 'Neraca')->where('list', 'Kewajiban_Ekuitas')->first();
 
-        foreach ($dapat as $key => $value) {
-            $newDetails[] = array('setup_id' => $dapat_id->id,
+        $delete = array($debet_id->id, $kredit_id->id);
+        SetupDetail::whereIn('setup_id', $delete)->delete();
+
+        foreach ($debet as $key => $value) {
+            $newDetails[] = array('setup_id' => $debet_id->id,
                                 'typecoa_id' => $value);
         }
         
-        foreach ($keluar as $key => $value) {
-            $newDetails[] = array('setup_id' => $keluar_id->id,
+        foreach ($kredit as $key => $value) {
+            $newDetails[] = array('setup_id' => $kredit_id->id,
                                 'typecoa_id' => $value);
         }
-
-        foreach ($lain as $key => $value) {
-            $newDetails[] = array('setup_id' => $lain_id->id,
-                                'typecoa_id' => $value);
-        }
-
-        $newDetails[] = array('setup_id' => $pajak_id->id, 'typecoa_id' => $pajak);
 
         try {
             SetupDetail::insert($newDetails);
@@ -79,51 +64,6 @@ class SetupNeracaController extends Controller
             return redirect()->back()->with('errorMsg', $this->getMessage($e));
         }
 
-        return redirect()->route('neraca.index')->with('successMsg', "Neraca Saved");
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        return redirect()->route('setup.neraca.index')->with('successMsg', "Neraca Saved");
     }
 }

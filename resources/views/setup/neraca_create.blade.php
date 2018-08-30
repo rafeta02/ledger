@@ -27,9 +27,8 @@
 @section('custom-scripts')
 <script type="text/javascript">
 
-var dapatC = 0;
-var keluarC = 0;
-var lainC = 0;
+var debetC = 0;
+var kreditC = 0;
 
 $(".select2").select2();
 
@@ -37,46 +36,32 @@ $(document).ready(function() {
 
   $('form').parsley();
 
-  $(document).on("click", "#addDapat", function() {
-    dapatC++;
+  $(document).on("click", "#addDebet", function() {
+    debetC++;
 
-    $('#tableDapat').append('<tr id="rowdapat'+dapatC+'"><td><select class="form-control" name="typedapat[]" id="dapatselect'+dapatC+'" data-placeholder="Choose Type Chart Of Account ..." required><option></option>@foreach($typeDebets as $type)<option value="{{$type->id}}">{{$type->name}}</option>@endforeach</select></td><td><button type="button" name="remove" id="'+dapatC+'" class="btn btn-danger btnDapat_remove">X</button></td></tr>');
+    $('#tableDebet').append('<tr id="rowdebet'+debetC+'"><td><select class="form-control" name="typedebet[]" id="debetselect'+debetC+'" data-placeholder="Choose Type Chart Of Account ..." required><option></option>@foreach($typeDebets as $type)<option value="{{$type->id}}">{{$type->name}}</option>@endforeach</select></td><td><button type="button" name="remove" id="'+debetC+'" class="btn btn-danger btnDebet_remove">X</button></td></tr>');
 
-    $('#dapatselect'+dapatC+'').select2();
+    $('#debetselect'+debetC+'').select2();
   });
    
-  $(document).on('click', '.btnDapat_remove', function(){
+  $(document).on('click', '.btnDebet_remove', function(){
     var button_id = $(this).attr("id"); 
-    $('#rowdapat'+button_id+'').remove();
-    dapatC--;
+    $('#rowdebet'+button_id+'').remove();
+    debetC--;
   });
 
-  $(document).on("click", "#addKeluar", function() {
-    keluarC++;
+  $(document).on("click", "#addKredit", function() {
+    kreditC++;
 
-    $('#tableKeluar').append('<tr id="rowkeluar'+keluarC+'"><td><select class="form-control" name="typekeluar[]" id="keluarselect'+keluarC+'" data-placeholder="Choose Type Chart Of Account ..." required><option></option>@foreach($typeKredits as $type)<option value="{{$type->id}}">{{$type->name}}</option>@endforeach</select></td><td><button type="button" name="remove" id="'+keluarC+'" class="btn btn-danger btnKeluar_remove">X</button></td></tr>');
+    $('#tableKredit').append('<tr id="rowkredit'+kreditC+'"><td><select class="form-control" name="typekredit[]" id="kreditselect'+kreditC+'" data-placeholder="Choose Type Chart Of Account ..." required><option></option>@foreach($typeKredits as $type)<option value="{{$type->id}}">{{$type->name}}</option>@endforeach</select></td><td><button type="button" name="remove" id="'+kreditC+'" class="btn btn-danger btnKredit_remove">X</button></td></tr>');
 
-    $('#keluarselect'+keluarC+'').select2();
+    $('#kreditselect'+kreditC+'').select2();
   });
    
-  $(document).on('click', '.btnKeluar_remove', function(){
+  $(document).on('click', '.btnKredit_remove', function(){
     var button_id = $(this).attr("id"); 
-    $('#rowkeluar'+button_id+'').remove();
-    keluarC--;
-  });
-
-  $(document).on("click", "#addLain", function() {
-    lainC++;
-
-    $('#tableLain').append('<tr id="rowlain'+lainC+'"><td><select class="form-control" name="typelain[]" id="lainselect'+lainC+'" data-placeholder="Choose Type Chart Of Account ..." required><option></option>@foreach($typeKredits as $type)<option value="{{$type->id}}">{{$type->name}}</option>@endforeach</select></td><td><button type="button" name="remove" id="'+lainC+'" class="btn btn-danger btnLain_remove">X</button></td></tr>');
-
-    $('#lainselect'+lainC+'').select2();
-  });
-   
-  $(document).on('click', '.btnLain_remove', function(){
-    var button_id = $(this).attr("id"); 
-    $('#rowlain'+button_id+'').remove();
-    lainC--;
+    $('#rowkredit'+button_id+'').remove();
+    kreditC--;
   });
 
 });
@@ -91,27 +76,27 @@ $(document).ready(function() {
       <div class="card-box">
         <div class="row">
           <div class="col-lg-12">
-            <form class="form-horizontal group-border-dashed" action="{{route('neraca.store')}}" method="post">
+            <form class="form-horizontal group-border-dashed" action="{{route('setup.neraca.store')}}" method="post">
               {{csrf_field()}}
               <div class="form-group">
                 <div class="col-sm-10 col-sm-offset-1">
                   <div class="panel panel-color panel-info">
                     <div class="panel-heading">
-                      <h3 class="panel-title">PENDAPATAN USAHA</h3>
+                      <h3 class="panel-title">AKTIVA</h3>
                     </div>
                     <div class="panel-body">
                       <div class="table-responsive">
-                        <table class="table table-bordered" id="tableDapat">
-                          <tr id="rowdapat0">
+                        <table class="table table-bordered" id="tableDebet">
+                          <tr id="rowdebet0">
                             <td>
-                              <select class="form-control select2" name="typedapat[]" data-placeholder="Choose Type Chart Of Account ..." required>
+                              <select class="form-control select2" name="typedebet[]" data-placeholder="Choose Type Chart Of Account ..." required>
                                 <option></option>
                                 @foreach($typeDebets as $type)
                                   <option value="{{$type->id}}">{{$type->name}}</option>
                                 @endforeach
                               </select>
                             </td>
-                            <td width="10%"><button type="button" name="addDapat" id="addDapat" class="btn btn-success">+</button></td>
+                            <td width="10%"><button type="button" name="addDebet" id="addDebet" class="btn btn-success">+</button></td>
                           </tr>  
                         </table>
                       </div> 
@@ -123,72 +108,21 @@ $(document).ready(function() {
                 <div class="col-sm-10 col-sm-offset-1">
                   <div class="panel panel-color panel-danger">
                     <div class="panel-heading">
-                      <h3 class="panel-title">BEBAN USAHA</h3>
+                      <h3 class="panel-title">KEWAJIBAN DAN EKUITAS</h3>
                     </div>
                     <div class="panel-body">
                       <div class="table-responsive">
-                        <table class="table table-bordered" id="tableKeluar">
-                          <tr id="rowkeluar0">
+                        <table class="table table-bordered" id="tableKredit">
+                          <tr id="rowkredit0">
                             <td>
-                              <select class="form-control select2" name="typekeluar[]" data-placeholder="Choose Type  Chart Of Account ..." required>
+                              <select class="form-control select2" name="typekredit[]" data-placeholder="Choose Type  Chart Of Account ..." required>
                                 <option></option>
                                 @foreach($typeKredits as $type)
                                   <option value="{{$type->id}}">{{$type->name}}</option>
                                 @endforeach
                               </select>
                             </td>
-                            <td width="10%"><button type="button" name="addKeluar" id="addKeluar" class="btn btn-success">+</button></td>
-                          </tr>  
-                        </table>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="form-group">
-                <div class="col-sm-10 col-sm-offset-1">
-                  <div class="panel panel-color panel-warning">
-                    <div class="panel-heading">
-                      <h3 class="panel-title">PENDAPATAN/BEBAN DILUAR USAHA</h3>
-                    </div>
-                    <div class="panel-body">
-                      <div class="table-responsive">
-                        <table class="table table-bordered" id="tableLain">
-                          <tr id="rowlain0">
-                            <td>
-                              <select class="form-control select2" name="typelain[]" data-placeholder="Choose Type  Chart Of Account ..." required>
-                                <option></option>
-                                @foreach($types as $type)
-                                  <option value="{{$type->id}}">{{$type->name}}</option>
-                                @endforeach
-                              </select>
-                            </td>
-                            <td width="10%"><button type="button" name="addLain" id="addLain" class="btn btn-success">+</button></td>
-                          </tr>  
-                        </table>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="form-group">
-                <div class="col-sm-10 col-sm-offset-1">
-                  <div class="panel panel-color panel-inverse">
-                    <div class="panel-heading">
-                      <h3 class="panel-title">BEBAN PAJAK</h3>
-                    </div>
-                    <div class="panel-body">
-                      <div class="table-responsive">
-                        <table class="table table-bordered" id="tablePajak">
-                          <tr id="rowpajak">
-                            <td>
-                              <select class="form-control select2" name="typepajak" data-placeholder="Choose Type  Chart Of Account ..." required>
-                                <option></option>
-                                @foreach($types as $type)
-                                  <option value="{{$type->id}}">{{$type->name}}</option>
-                                @endforeach
-                              </select>
-                            </td>
+                            <td width="10%"><button type="button" name="addKredit" id="addKredit" class="btn btn-success">+</button></td>
                           </tr>  
                         </table>
                       </div>
@@ -209,5 +143,5 @@ $(document).ready(function() {
       </div>
     </div>
   </div>
-</section CREATE NEW JOURNAL>
+</section SETUP NERACA>
 @endsection
