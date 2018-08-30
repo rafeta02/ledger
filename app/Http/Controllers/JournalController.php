@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Coa;
 use App\Journal;
 use App\JournalDetail;
+use App\Ledger;
 use Carbon\Carbon;
 use Excel;
 use File;
@@ -224,6 +225,7 @@ class JournalController extends Controller
 
     public function postingPost(Request $request)
     {
+        //dd($request->all());
         if(!isset($request->posting)){
             return redirect()->back()->with('errorMsg', 'No journal choosen !');
         }
@@ -233,6 +235,62 @@ class JournalController extends Controller
             } catch (\PDOException $e) {
                 return redirect()->back()->with('errorMsg', $this->getMessage($e));
             }
+
+            $jurnal = Journal::with('journal_details')->where('id', $value)->first();
+            foreach ($jurnal->journal_details as $key => $value) {
+                $coas[] = $value->coa_id;
+            }
+        }
+
+        $periodBefore = Carbon::now()->subMonth(1)->format('Y-m');
+        $periodNow = Carbon::now()->format('Y-m');
+        $like = $periodNow."-%";
+
+        foreach($coas as $val) {
+            $coa = Coa::find($val);
+            $coa_id[] = $val;
+
+            if($coa->children != null){
+                foreach ($coa->children as $key => $value) {
+                    $coa_id[] = $value->id;
+                }
+            }
+
+            $ledger = Ledger::where('period', $periodBefore)->where('coa_id', $val)->first();
+            if($ledger == null){
+                $opening_balance = 0;
+            }else{
+                $opening_balance = $ledger->closing_balance;
+            }
+                
+            $details =  JournalDetail::whereHas('journal', function ($q) use ($like) {
+                        $q->where('date', 'like', $like)->isPosted();
+                    })->whereIn('coa_id', $coa_id)->get();
+
+            $debet = $details->sum('debet');
+            $kredit = $details->sum('kredit');
+            $saldo = $opening_balance + ($details->sum('debet') - $details->sum('kredit'));
+            //$current[$val] = array($opening_balance, $debet, $kredit, $saldo);
+
+            $ledger = Ledger::where('period', $periodNow)->where('coa_id', $val)->first();
+            if($ledger != null){
+                $ledger->debet_total = $debet;
+                $ledger->kredit_total = $kredit;
+                $ledger->closing_balance = $saldo;
+                try {
+                    $ledger->save();
+                } catch (\PDOException $e) {
+                    return redirect()->back()->with('errorMsg', $this->getMessage($e));
+                }
+            }else{
+                $newLedger = array('period' => $periodNow, 'coa_id' => $val, 'opening_balance' => $opening_balance, 'debet_total' => $debet, 'kredit_total' => $kredit, 'closing_balance' => $saldo);
+                try {
+                    Ledger::create($newLedger);
+                } catch (\PDOException $e) {
+                    return redirect()->back()->with('errorMsg', $this->getMessage($e));
+                } 
+            }
+            unset($coa_id);
         }
         return redirect()->route('journal.posting')->with('successMsg', 'Journal posted successfully!');
     }

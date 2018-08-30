@@ -38,12 +38,6 @@ class LedgerController extends Controller
         //dd($coas);
         foreach ($coas as $coa) {
             $coa = Coa::find($coa->id);
-            $ledger = Ledger::where('period', $periodBefore)->where('coa_id', $coa->id)->first();
-            if($ledger == null){
-                continue;
-            }else{
-                $opening_balance = $ledger->closing_balance;
-            }
             //dd($coa);
             $coa_id[] = $coa->id;
 
