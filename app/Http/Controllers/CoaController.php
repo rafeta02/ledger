@@ -131,6 +131,29 @@ class CoaController extends Controller
         return redirect()->back()->with('successMsg', 'COA Deleted');
     }
 
+    public function exportExample(){
+        $sheet1 = array('code', 'name', 'group', 'type_coa_id', 'coa_parent_code');
+
+        $type_coas = TypeCoa::orderBy('id')->get();
+        foreach ($type_coas as $key => $value) {
+            $sheet2[$key] = array(
+                    'ID' => $value->id,
+                    'Name' => $value->name,
+                    'Value' => $value->value,
+                );
+        }
+        return Excel::create('Coa_Import_Example', function($excel) use ($sheet1, $sheet2){
+            $excel->sheet('CoaSheet', function($sheet) use ($sheet1)
+            {
+                $sheet->fromArray($sheet1);
+            });
+            $excel->sheet('TypeCoaSheet', function($sheet) use ($sheet2)
+            {
+                $sheet->fromArray($sheet2);
+            });
+        })->download('xlsx');
+    }
+
     public function import()
     {
         return view('pages.coa.coa_import');
@@ -148,11 +171,19 @@ class CoaController extends Controller
                 })->get();
                 if(!empty($data) && $data->count()){
                     foreach ($data as $key => $value) {
+                        $coa = Coa::where('code', $value->coa_parent_code)->first();
+                        if(is_null($coa)){
+                            $coa_id = null;
+                        }else{
+                            $coa_id = $coa->id;
+                        }
+
                         $insert[] = [
                         'code' => $value->code,
                         'name' => $value->name,
                         'group' => $value->group,
-                        'type_id' => 1,
+                        'type_id' => $value->type_coa_id,
+                        'parent_id' => $coa_id,
                         'created_at' => Carbon::now(),
                         'updated_at' => Carbon::now(),
                         ];

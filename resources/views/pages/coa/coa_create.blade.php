@@ -74,11 +74,11 @@ $(document).ready(function() {
                 </div>
               </div>
               <div class="form-group">
-                <label class="col-sm-3 control-label">Parent Id</label>
+                <label class="col-sm-3 control-label">Parent Code</label>
                 <div class="col-sm-6">
                   <select class="form-control select2" name="parent" data-placeholder="Choose Parent..." required>
                     <option></option>
-                    <option value="null">Null</option>
+                    <option value="null">-</option>
                      @foreach($coas as $coa)
                       <option value="{{$coa->id}}">{{$coa->code}}-{{$coa->name}}</option>
                     @endforeach

@@ -47,12 +47,15 @@ $(document).ready(function() {
                 <div class="col-sm-6">
                   <input type="file" name="file" class="form-control filestyle" data-buttonbefore="true" required placeholder="Choose your xls file" />
                 </div>
+                <div class="col-sm-3">
+                  <a href="{{route('coa.exportexample')}}" class="btn btn-default waves-effect waves-light">Example<span class="btn-label btn-label-right"><i class="fa  fa-link"></i></span></a>
+                </div>
               </div>
               <div class="form-group">
                 <div class="col-sm-offset-3 col-sm-9 m-t-15">
                   <button type="submit" class="btn btn-primary">
                     Submit
-                  </button>
+                  </button>            
                 </div>
               </div>
             </form>

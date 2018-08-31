@@ -33,6 +33,9 @@ Route::resource('type-coa', 'TypecoaController')->except([
 
 Route::get('/coa/import', 'CoaController@import')->name('coa.import');
 Route::post('/coa/import', 'CoaController@importPost')->name('coa.importpost');
+Route::get('/coa/examplexport', 'CoaController@exportExample')->name('coa.exportexample');
+//Route::get('/coa/latihanexport', 'CoaController@exportLatihan')->name('coa.exportlatihan');
+
 Route::resource('coa', 'CoaController')->except([
 	'view'
 ]);
