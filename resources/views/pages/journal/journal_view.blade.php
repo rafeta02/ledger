@@ -6,7 +6,7 @@
 
 
 @section('page-title')
-<h3 class="page-title">Posting Journals</h3>
+<h3 class="page-title">Journals</h3>
 @endsection
 
 @section('head')
@@ -28,34 +28,19 @@
 
 @section('custom-scripts')
 <script type="text/javascript">
-  function docheck(checkboxElem) {
-    var id = $(checkboxElem).attr("id");
-    if (checkboxElem.checked) {
-
-      $('#checkval').append('<input type="hidden" id="post'+id+'" name="posting[]" value="'+checkboxElem.value+'">');
-    } else {
-      $('#post'+id).remove();
-    }
-  }
 </script>
 @endsection
 
 
 @section('content')
-<section POSTING JOURNALS>
+<section VIEW JOURNALS>
   <br>
-  
   <div class="row">
     <div class="col-sm-12">
-      <div class="card-box">
-        <a href="{{ route('journal.create') }}" class="btn btn-pink btn-rounded waves-effect waves-light">Create New Journal</a>
-        <a href="{{ route('journal.import') }}" class="btn btn-pink btn-rounded waves-effect waves-light">Import Journal</a>
-        <br><br>
-        
+      <div class="card-box">        
         <table data-toggle="table" class="table-bordered">
           <thead>
             <tr>
-              <th data-field="posting" class="text-left"></th>
               <th data-field="date" data-sortable="true" class="text-center">Journal Date</th>
               <th data-field="description" data-sortable="true" class="text-center">Description</th>
               <th data-field="type" class="text-center">Type</th>
@@ -64,15 +49,8 @@
             </tr>
           </thead>
           <tbody>
-              @php
-              $a = 0;
-              @endphp
               @foreach($journals as $data)
-                @php
-                $a++;
-                @endphp
                 <tr>
-                  <td><input type="checkbox" id="{{$a}}" value="{{ $data->id }}" onchange="docheck(this)"></td>
                   <td>{{ $data->date }}</td>
                   <td class="text-left">{{ $data->description }}</td>
                   <td>{{ $data->type }}</td>
@@ -113,23 +91,8 @@
         <div class="text-center"> 
           {{ $journals->links() }}
         </div>
-        <br>
-        <br>
-      <div class="row">
-        <form action="{{route('journal.postingpost')}}" method="post">
-          {{csrf_field()}}
-          <div id="checkval">
-            
-          </div>
-          <div class="col-sm-12 text-right">
-            <button type="submit" class="btn btn-lg btn-primary">
-              Posting Journal
-            </button>
-          </div>
-        </form>
-      </div>
     </div>
   </div>
   </div>
-</section POSTING JOURNALS>
+</section VIEW JOURNALS>
 @endsection

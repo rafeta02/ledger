@@ -228,6 +228,72 @@ class LedgerController extends Controller
         return redirect()->back()->with('successMsg', "Ledger save successfully");
     }
 
+    public function save(Request $request)
+    {
+        $karbon = Carbon::now();
+        $periodBefore = $karbon->subMonth(1)->format('Y-m');
+        $now = Carbon::now();
+        $periodNow = $now->format('Y-m');
+        $like = $periodNow."-%";
+        $periodText = $now->format('F Y');
+
+        $coas = Coa::orderBy('code')->get();
+
+        foreach ($coas as $coa) {
+            $coa = Coa::find($coa->id);
+
+            $coa_id[] = $coa->id;
+
+            if($coa->children != null){
+                foreach ($coa->children as $key => $value) {
+                    $coa_id[] = $value->id;
+                }
+            }
+
+            $ledger = Ledger::where('period', $periodBefore)->where('coa_id', $coa->id)->first();
+            if($ledger == null){
+                $opening_balance = 0;
+            }else{
+                $opening_balance = $ledger->closing_balance;
+            }
+                
+            $details =  JournalDetail::whereHas('journal', function ($q) use ($like) {
+                        $q->where('date', 'like', $like)->isPosted();
+                    })->whereIn('coa_id', $coa_id)->get();
+
+            
+            $debet = $details->sum('debet');
+            $kredit = $details->sum('kredit');
+            $saldo = $opening_balance + ($details->sum('debet') - $details->sum('kredit'));
+            
+
+            $ledger = Ledger::where('period', $periodNow)->where('coa_id', $coa->id)->first();
+            if($ledger != null){
+                $ledger->debet_total = $debet;
+                $ledger->kredit_total = $kredit;
+                $ledger->closing_balance = $saldo;
+                try {
+                    $ledger->save();
+                } catch (\PDOException $e) {
+                    return redirect()->back()->with('errorMsg', $this->getMessage($e));
+                }
+            }else{
+               //$newLedger = $request->only(['period', 'coa_id', 'opening_balance', 'debet_total', 'kredit_total', 'closing_balance']);
+               $newLedger = array('period' => $periodNow, 'coa_id' => $coa->id, 'opening_balance' => $opening_balance, 'debet_total' => $debet, 'kredit_total' => $kredit, 'closing_balance'=> $saldo);
+                try {
+                    Ledger::create($newLedger);
+                } catch (\PDOException $e) {
+                    return redirect()->back()->with('errorMsg', $this->getMessage($e));
+                } 
+            }
+
+
+            unset($coa_id);
+        }
+
+        return redirect()->back()->with('successMsg', "Ledger save successfully");
+    }
+
     /**
      * Display the specified resource.
      *

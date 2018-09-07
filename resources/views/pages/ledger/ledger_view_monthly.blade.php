@@ -128,6 +128,15 @@ $(document).ready(function() {
       <div class="text-center"> 
         {{ $coas->links() }}
       </div>
+      <div class="text-center">
+        <form action="{{route('ledger.save')}}" method="post">
+          {{csrf_field()}}
+          <button type="submit" class="btn btn-lg btn-primary">
+            <input type="hidden" name="period" value="{{$periodNow}}">
+            Save
+          </button> 
+        </form>
+      </div>
     </div>
   </div>
   </div>

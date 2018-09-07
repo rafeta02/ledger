@@ -20,7 +20,7 @@ class CoaController extends Controller
      */
     public function index()
     {
-        $coas = Coa::orderBy('code')->with('children', 'parent')->paginate(10);
+        $coas = Coa::orderBy('code')->with('children', 'parent')->paginate(15);
         return view('pages.coa.coa_manage', compact('coas'));
     }   
 
@@ -146,10 +146,50 @@ class CoaController extends Controller
             $excel->sheet('CoaSheet', function($sheet) use ($sheet1)
             {
                 $sheet->fromArray($sheet1);
+                $sheet->setWidth(array(
+                    'A' => 15,
+                    'B' => 15,
+                    'C' => 15,
+                    'D' => 15,
+                    'E' => 20,  
+                ));
             });
             $excel->sheet('TypeCoaSheet', function($sheet) use ($sheet2)
             {
                 $sheet->fromArray($sheet2);
+                $sheet->setWidth(array(
+                    'A' => 5,
+                    'B' => 40,
+                    'C' => 20, 
+                ));
+            });
+        })->download('xlsx');
+    }
+
+    public function export(){
+        $coas = Coa::orderBy('code')->with('children', 'parent', 'type')->get();
+        //dd($coas);
+        foreach ($coas as $key => $coa) {
+            if($coa->parent != null){
+                $data[$key]['No Induk COA'] = "";
+            }else{
+                $data[$key]['No Induk COA'] = $coa->code;
+            }
+                $data[$key]['No COA'] = $coa->code;
+                $data[$key]['Nama Akun'] = $coa->name;
+                $data[$key]['Tipe Akun'] = $coa->type->name;
+        }
+
+        return Excel::create('Coa_Export', function($excel) use ($data){
+            $excel->sheet('CoaSheet', function($sheet) use ($data)
+            {
+                $sheet->fromArray($data);
+                $sheet->setWidth(array(
+                    'A' => 15,
+                    'B' => 20,
+                    'C' => 50,
+                    'D' => 40, 
+                ));
             });
         })->download('xlsx');
     }
@@ -161,34 +201,43 @@ class CoaController extends Controller
 
     public function importPost(Request $request)
     {
-        //dd($request->all());
         if($request->hasFile('file')){
             $extension = File::extension($request->file->getClientOriginalName());
             if ($extension == "xlsx" || $extension == "xls" || $extension == "csv") {
- 
                 $path = $request->file->getRealPath();
-                $data = Excel::load($path, function($reader) {
+                $data = Excel::selectSheets('CoaSheet')->load($path, function($reader) {
                 })->get();
+
                 if(!empty($data) && $data->count()){
+
                     foreach ($data as $key => $value) {
-                        $coa = Coa::where('code', $value->coa_parent_code)->first();
-                        if(is_null($coa)){
+                        if(is_null($value->coa_parent_code)){
                             $coa_id = null;
                         }else{
-                            $coa_id = $coa->id;
+                            $parent_code = strval($value->coa_parent_code);
+                            $coa = Coa::where('code', $parent_code)->first();
+                            if(is_null($coa)){
+                                $coa_id = null;
+                            }else{
+                                $coa_id = $coa->id;
+                            }
                         }
 
+                        $code = strval($value->code);
+                        $type_id = strval($value->type_coa_id);
+
                         $insert[] = [
-                        'code' => $value->code,
+                        'code' => $code,
                         'name' => $value->name,
                         'group' => $value->group,
-                        'type_id' => $value->type_coa_id,
+                        'type_id' => $type_id,
                         'parent_id' => $coa_id,
                         'created_at' => Carbon::now(),
                         'updated_at' => Carbon::now(),
                         ];
+                            
                     }
- 
+
                     if(!empty($insert)){
                         $insertData = Coa::insert($insert);
                         if ($insertData) {

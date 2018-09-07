@@ -29,6 +29,7 @@
       <div class="card-box">
         <a href="{{ route('coa.create') }}" class="btn btn-pink btn-rounded waves-effect waves-light">Create New COA</a>
         <a href="{{ route('coa.import') }}" class="btn btn-pink btn-rounded waves-effect waves-light">Import COA</a>
+        <a href="{{ route('coa.export') }}" class="btn btn-pink btn-rounded waves-effect waves-light">Export COA</a>
         <br><br>
         <table data-toggle="table" class="table-bordered ">
         <thead>

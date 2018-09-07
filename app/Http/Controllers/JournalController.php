@@ -25,6 +25,26 @@ class JournalController extends Controller
         return view('pages.journal.journal_create', compact('coas'));
     }
 
+    public function filter(){
+        return view('pages.journal.journal_filter');
+    }
+
+    public function view(Request $request)
+    {
+        //dd($request->all());
+        $periodFilter = $request->period;
+
+        if($request->type != "All"){
+            $typeFilter = array($request->type);
+        }else{
+            $typeFilter = array('Kas', 'Memo');
+        }
+        $like = $periodFilter."-%";
+
+        $journals = Journal::where('date', 'like', $like)->whereIn('type', $typeFilter)->paginate(10);
+        return view('pages.journal.journal_view', compact('journals'));
+    }
+
     /**
      * Show the form for creating a new resource.
      *
