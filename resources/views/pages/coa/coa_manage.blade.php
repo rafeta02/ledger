@@ -27,8 +27,12 @@
   <div class="row">
     <div class="col-sm-12">
       <div class="card-box">
-        <a href="{{ route('coa.create') }}" class="btn btn-pink btn-rounded waves-effect waves-light">Create New COA</a>
+        @can('Create_Coa')
+          <a href="{{ route('coa.create') }}" class="btn btn-pink btn-rounded waves-effect waves-light">Create New COA</a>
+        @endcan 
+        @can('Import_Coa')
         <a href="{{ route('coa.import') }}" class="btn btn-pink btn-rounded waves-effect waves-light">Import COA</a>
+        @endcan 
         <a href="{{ route('coa.export') }}" class="btn btn-pink btn-rounded waves-effect waves-light">Export COA</a>
         <br><br>
         <table data-toggle="table" class="table-bordered ">
@@ -57,12 +61,16 @@
               @endif
             </td>
             <td>
+              @can('Edit_Coa')
+                <a href="{{route('coa.edit', $data->id)}}" class="btn btn-success btn-custom waves-effect waves-light btn-xs">edit</a>
+              @endcan
+              @can('Delete_Coa')
               <form action="{{ route('coa.destroy' , $data->id)}}" method="POST">
                 <input name="_method" type="hidden" value="DELETE">
                 {{ csrf_field() }}
-                <a href="{{route('coa.edit', $data->id)}}" class="btn btn-success btn-custom waves-effect waves-light btn-xs">edit</a>
                 <button type="submit" onclick="return confirm('Are you sure to delete?')" class="btn btn-danger btn-custom waves-effect waves-light btn-xs">delete</button>
               </form>
+              @endcan
             </td>
           </tr>
           @endforeach

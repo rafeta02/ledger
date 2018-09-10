@@ -48,8 +48,12 @@
   <div class="row">
     <div class="col-sm-12">
       <div class="card-box">
-        <a href="{{ route('journal.create') }}" class="btn btn-pink btn-rounded waves-effect waves-light">Create New Journal</a>
-        <a href="{{ route('journal.import') }}" class="btn btn-pink btn-rounded waves-effect waves-light">Import Journal</a>
+        @can('Create_Journal')
+          <a href="{{ route('journal.create') }}" class="btn btn-pink btn-rounded waves-effect waves-light">Create New Journal</a>
+        @endcan
+        @can('Import_Journal')
+          <a href="{{ route('journal.import') }}" class="btn btn-pink btn-rounded waves-effect waves-light">Import Journal</a>
+        @endcan
         <br><br>
         
         <table data-toggle="table" class="table-bordered">
@@ -99,12 +103,16 @@
                     </table>
                   </td>
                   <td>
-                    <form action="{{ route('journal.destroy' , $data->id)}}" method="POST">
+                    @can('Edit_Journal')
+                      <a href="{{route('journal.edit', $data->id)}}" class="btn btn-success btn-custom waves-effect waves-light btn-xs">edit</a>
+                    @endcan
+                    @can('Delete_Journal')
+                      <form action="{{ route('journal.destroy' , $data->id)}}" method="POST">
                       <input name="_method" type="hidden" value="DELETE">
                       {{ csrf_field() }}
-                      <a href="{{route('journal.edit', $data->id)}}" class="btn btn-success btn-custom waves-effect waves-light btn-xs">edit</a>
                       <button type="submit" name="delete" onclick="return confirm('Are you sure to delete?')" class="btn btn-danger btn-custom waves-effect waves-light btn-xs">delete</button>
-                    </form>
+                      </form>
+                    @endcan
                   </td>
                 </tr>
               @endforeach
@@ -122,9 +130,11 @@
             
           </div>
           <div class="col-sm-12 text-right">
+          @can('Posting_Journal')
             <button type="submit" class="btn btn-lg btn-primary">
               Posting Journal
             </button>
+          @endcan
           </div>
         </form>
       </div>

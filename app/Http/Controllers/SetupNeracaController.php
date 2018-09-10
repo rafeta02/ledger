@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\TypeCoa;
 use App\Setup;
 use App\SetupDetail;
+use Auth;
+use Session;
 
 class SetupNeracaController extends Controller
 {

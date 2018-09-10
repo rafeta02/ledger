@@ -67,7 +67,7 @@ $(document).ready(function() {
                 @php
                 $save = 0;
                 @endphp
-
+                
                 <form action="{{route('ledger.store')}}" method="post">
                   {{csrf_field()}}
                   <tr>

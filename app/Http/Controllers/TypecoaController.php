@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests\TypecoaRequest;
 use App\TypeCoa;
+use Auth;
+use Session;
 
 class TypecoaController extends Controller
 {

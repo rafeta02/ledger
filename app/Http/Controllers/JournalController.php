@@ -8,6 +8,8 @@ use App\Journal;
 use App\JournalDetail;
 use App\Ledger;
 use Carbon\Carbon;
+use Auth;
+use Session;
 use Excel;
 use File;
 

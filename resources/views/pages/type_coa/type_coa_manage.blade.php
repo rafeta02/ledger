@@ -31,7 +31,9 @@
   <div class="row">
     <div class="col-sm-12">
       <div class="card-box">
-      	<a href="{{ route('type-coa.create') }}" class="btn btn-pink btn-rounded waves-effect waves-light">Create New Type Coa</a>
+        @can('Create_Type_Coa')
+      	 <a href="{{ route('type-coa.create') }}" class="btn btn-pink btn-rounded waves-effect waves-light">Create New Type Coa</a>
+        @endcan
         <br><br>
         <table data-toggle="table" class="table-bordered">
         <thead>
@@ -47,12 +49,16 @@
             <td>{{ $data->name }}</td>
             <td>{{ $data->value }}</td>
             <td>
+              @can('Edit_Type_Coa')
+                <a href="{{route('type-coa.edit', $data->id)}}" class="btn btn-success btn-custom waves-effect waves-light btn-xs">edit</a>
+              @endcan
+              @can('Delete_Type_Coa')
             	<form action="{{ route('type-coa.destroy' , $data->id)}}" method="POST">
 								<input name="_method" type="hidden" value="DELETE">
 								{{ csrf_field() }}
-              	<a href="{{route('type-coa.edit', $data->id)}}" class="btn btn-success btn-custom waves-effect waves-light btn-xs">edit</a>
 						  	<button type="submit" onclick="return confirm('Are you sure to delete?')" class="btn btn-danger btn-custom waves-effect waves-light btn-xs">delete</button>
 							</form>
+              @endcan
             </td>
           </tr>
           @endforeach

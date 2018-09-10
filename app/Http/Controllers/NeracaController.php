@@ -9,6 +9,8 @@ use App\Setup;
 use App\SetupDetail;
 use Carbon\Carbon;
 use App\Ledger;
+use Auth;
+use Session;
 
 
 class NeracaController extends Controller

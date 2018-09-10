@@ -9,9 +9,13 @@
   <div class="navbar navbar-default" role="navigation">
     <div class="container">
       <ul class="nav navbar-nav navbar-right pull-right">
-        <li class="waves-effect waves-light"><a href="#">
+        <li class="waves-effect waves-light"><a href="{{ route('logout') }}" 
+          onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
           <!-- <i class="pull-right ti-user m-r-10 text-custom" style="padding-top: 22px; padding-left: 9px;"></i>  -->
           Log Out</a>
+          <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+            @csrf
+          </form>
         </li>
       </ul>
     </div>
