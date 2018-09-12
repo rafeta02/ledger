@@ -62,6 +62,8 @@ Route::middleware(['auth', 'clearance'])->group(function () {
 	Route::get('/journal/import', 'JournalController@import')->name('journal.import');
 	Route::post('/journal/import', 'JournalController@importPost')->name('journal.importpost');
 
+	Route::post('/journal/voucher/{id}', 'JournalController@voucher')->name('journal.voucher');
+
 	Route::resource('journal', 'JournalController');
 
 	Route::resource('/setup/neraca', 'SetupNeracaController', ['as' => 'setup'])->only([

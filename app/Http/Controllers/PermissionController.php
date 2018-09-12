@@ -23,9 +23,9 @@ class PermissionController extends Controller
      */
     public function index()
     {
-        $permissions = Permission::all();
+        $permissions = Permission::orderBy('name')->paginate(10);
 
-        return view('permissions.index')->with('permissions', $permissions);
+        return view('pages.permissions.index')->with('permissions', $permissions);
     }
 
     /**
@@ -37,7 +37,7 @@ class PermissionController extends Controller
     {
         $roles = Role::get();
 
-        return view('permissions.create')->with('roles', $roles);
+        return view('pages.permissions.create')->with('roles', $roles);
     }
 
     /**
@@ -71,8 +71,8 @@ class PermissionController extends Controller
         }
 
         return redirect()->route('permissions.index')
-            ->with('flash_message',
-             'Permission'. $permission->name.' added!');
+            ->with('successMsg',
+             'Permission '. $permission->name.' added!');
     }
 
     /**
@@ -96,7 +96,7 @@ class PermissionController extends Controller
     {
         $permission = Permission::find($id);
         
-        return view('permissions.edit', compact('permission'));
+        return view('pages.permissions.edit', compact('permission'));
     }
 
     /**
@@ -118,8 +118,8 @@ class PermissionController extends Controller
         $permission->fill($input)->save();
 
         return redirect()->route('permissions.index')
-            ->with('flash_message',
-             'Permission'. $permission->name.' updated!');
+            ->with('successMsg',
+             'Permission '. $permission->name.' updated!');
     }
 
     /**
@@ -132,16 +132,16 @@ class PermissionController extends Controller
     {
         $permission = Permission::findOrFail($id);
         
-        if ($permission->name == "Administer roles & permissions") {
+        if ($permission->name == "Administrator") {
             return redirect()->route('permissions.index')
-            ->with('flash_message',
+            ->with('errorMsg',
              'Cannot delete this Permission!');
         }
         
         $permission->delete();
 
         return redirect()->route('permissions.index')
-            ->with('flash_message',
+            ->with('successMsg',
              'Permission deleted!');
     }
 }

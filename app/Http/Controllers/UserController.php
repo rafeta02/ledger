@@ -24,9 +24,9 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::all();
+        $users = User::paginate(10);
 
-        return view('users.index')->with('users', $users);
+        return view('pages.users.index')->with('users', $users);
     }
 
     /**
@@ -37,7 +37,7 @@ class UserController extends Controller
     public function create()
     {
         $roles = Role::get();
-        return view('users.create', ['roles'=>$roles]);
+        return view('pages.users.create', ['roles'=>$roles]);
     }
 
     /**
@@ -67,7 +67,7 @@ class UserController extends Controller
         }        
 
         return redirect()->route('users.index')
-            ->with('flash_message',
+            ->with('successMsg',
              'User successfully added.');
     }
 
@@ -93,7 +93,7 @@ class UserController extends Controller
         $user = User::findOrFail($id);
         $roles = Role::get();
 
-        return view('users.edit', compact('user', 'roles'));
+        return view('pages.users.edit', compact('user', 'roles'));
     }
 
     /**
@@ -123,7 +123,7 @@ class UserController extends Controller
             $user->roles()->detach();
         }
         return redirect()->route('users.index')
-            ->with('flash_message',
+            ->with('successMsg',
              'User successfully edited.');
     }
 
@@ -139,7 +139,7 @@ class UserController extends Controller
         $user->delete();
 
         return redirect()->route('users.index')
-            ->with('flash_message',
+            ->with('successMsg',
              'User successfully deleted.');
     }
 }

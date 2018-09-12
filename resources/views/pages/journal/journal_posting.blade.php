@@ -106,6 +106,12 @@
                     @can('Edit_Journal')
                       <a href="{{route('journal.edit', $data->id)}}" class="btn btn-success btn-custom waves-effect waves-light btn-xs">edit</a>
                     @endcan
+                    @can('Voucher_Journal')
+                    <form action="{{ route('journal.voucher' , $data->id)}}" method="POST">
+                      {{ csrf_field() }}
+                      <button type="submit" name="voucher" onclick="return confirm('Are you sure to export voucher?')" class="btn btn-info btn-custom waves-effect waves-light btn-xs">voucher</button>
+                    </form>
+                    @endcan
                     @can('Delete_Journal')
                       <form action="{{ route('journal.destroy' , $data->id)}}" method="POST">
                       <input name="_method" type="hidden" value="DELETE">

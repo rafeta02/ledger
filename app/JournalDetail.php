@@ -10,7 +10,7 @@ class JournalDetail extends Model
     public $timestamps = false;
     protected $table = 'gl_journal_details';
 	protected $guarded = ['id'];
-    protected $appends = ['journalDate', 'journalDescription', 'saldo', 'coaName'];
+    protected $appends = ['journalDate', 'journalDescription', 'saldo', 'coaName', 'coaNameName', 'coaCodeCode'];
 
 	public function coa(){
     	return $this->belongsTo(Coa::class, 'coa_id');
@@ -22,6 +22,14 @@ class JournalDetail extends Model
 
     public function getCoaNameAttribute(){
         return $this->coa->code." - ".$this->coa->name;
+    }
+
+    public function getCoaNameNameAttribute(){
+        return $this->coa->name;
+    }
+
+    public function getCoaCodeCodeAttribute(){
+        return $this->coa->code;
     }
 
     public function getJournalDateAttribute(){

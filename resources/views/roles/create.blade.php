@@ -21,8 +21,8 @@
 
     <div class='form-group'>
         @foreach ($permissions as $permission)
-            {{ Form::checkbox('permissions[]',  $permission->id ) }}
-            {{ Form::label($permission->name, ucfirst($permission->name)) }}<br>
+            {{ Form::checkbox('permissions[]',  $permission[0] ) }}
+            {{ Form::label($permission->name, ucfirst($permission[1])) }}<br>
 
         @endforeach
     </div>

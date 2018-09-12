@@ -12,6 +12,7 @@ use Auth;
 use Session;
 use Excel;
 use File;
+use PDF;
 
 
 class JournalController extends Controller
@@ -410,5 +411,13 @@ class JournalController extends Controller
                 return redirect()->back()->with('errorMsg', 'File is a '.$extension.' file.!! Please upload a valid xls/csv file..!!');
             }
         }
+    }
+
+    public function voucher($id){
+        $journal = Journal::with('journal_details')->find($id);
+        $filename = "Voucher/".$journal->id."/".$journal->date.".pdf";
+        $pdf = PDF::loadView('pages.template.voucher', compact('journal'))->setPaper('a4', 'landscape');;
+        return $pdf->download($filename);
+        //return view('pages.template.voucher', compact('journal'));
     }
 }
