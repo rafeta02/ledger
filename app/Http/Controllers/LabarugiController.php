@@ -78,7 +78,57 @@ class LabarugiController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //dd($request->all());
+        if($request->lababerjalan >= 0){
+            $debet = $request->lababerjalan;
+            $kredit = 0;
+        }else{
+            $debet = 0;
+            $kredit = abs($request->lababerjalan);
+        }
+
+        $periodNow = Carbon::now()->format('Y-m');
+        $periodBefore = Carbon::now()->subMonth(1)->format('Y-m');
+        $like = $periodNow."-%";
+
+        $laba = Setup::with('setup_details')->where('name', 'Labarugi')->where('list', 'Laba_Berjalan')->first();
+        foreach ($laba->setup_details as $key => $value) {
+            $laba_coa = $value->coa_id;
+        }
+
+        $ledger = Ledger::where('period', $periodNow)->where('coa_id', $laba_coa)->first();
+        if($ledger != null){
+            $ledger->debet_total = $debet;
+            $ledger->kredit_total = $kredit;
+
+            $saldo = $ledger->opening_balance + ($debet - $kredit);
+
+            $ledger->closing_balance = $saldo;
+            try {
+                $ledger->save();
+            } catch (\PDOException $e) {
+                return redirect()->back()->with('errorMsg', $this->getMessage($e));
+            }
+        }else{
+            $ledgerBefore = Ledger::where('period', $periodBefore)->where('coa_id', $laba_coa)->first();
+            if($ledgerBefore == null){
+                $opening_balance = 0;
+            }else{
+                $opening_balance = $ledgerBefore->closing_balance;
+            }
+            
+            $saldo = $opening_balance + ($debet - $kredit);
+
+            $newLedger = array('period' => $periodNow, 'coa_id' => $laba_coa, 'opening_balance' => $opening_balance, 'closing_balance' => $saldo);
+
+            try {
+                Ledger::create($newLedger);
+            } catch (\PDOException $e) {
+                return redirect()->back()->with('errorMsg', $this->getMessage($e));
+            } 
+        }
+
+        return redirect()->back()->with('successMsg', "Ledger save successfully");
     }
 
     /**

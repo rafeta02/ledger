@@ -44,7 +44,8 @@
           $pajakTotal = 0;
           @endphp
           <div class="col-lg-12">
-            <form class="form-horizontal group-border-dashed" action="#" method="post">
+            <form class="form-horizontal group-border-dashed" action="{{route('labarugi.store')}}" method="post">
+              {{csrf_field()}}
               <div class="form-group">
                 <div class="col-sm-10 col-sm-offset-1">
                   <div class="panel panel-success panel-border">
@@ -238,6 +239,7 @@
                             </td>
                             <td class="text-right"><h3 class="panel-title">
                             {{number_format(abs($laba2),0,",", ".")}}</h3></td>
+                            <input type="hidden" name="lababerjalan" value="{{$laba2}}">
                           </tr> 
                         </table>
                       </div>

@@ -110,6 +110,7 @@ $(document).ready(function() {
                             <td>
                               <input type="hidden" name="detailsetup[]" value="{{$value->id}}">
                               <select class="form-control select2" name="typedapat[]" data-placeholder="Choose Type Chart Of Account ..." required>
+                                <option></option>
                                 @foreach($typeDebets as $type)
                                   <option value="{{$type->id}}" {{($type->id == $value->typecoa_id) ? 'selected':''}}>{{$type->name}}</option>
                                 @endforeach
@@ -148,6 +149,7 @@ $(document).ready(function() {
                             <td>
                               <input type="hidden" name="detailsetup[]" value="{{$value->id}}">
                               <select class="form-control select2" name="typekeluar[]" data-placeholder="Choose Type Chart Of Account ..." required>
+                                <option></option>
                                 @foreach($typeKredits as $type)
                                   <option value="{{$type->id}}" {{($type->id == $value->typecoa_id) ? 'selected':''}}>{{$type->name}}</option>
                                 @endforeach
@@ -186,6 +188,7 @@ $(document).ready(function() {
                             <td>
                               <input type="hidden" name="detailsetup[]" value="{{$value->id}}">
                               <select class="form-control select2" name="typelain[]" data-placeholder="Choose Type Chart Of Account ..." required>
+                                <option></option>
                                 @foreach($types as $type)
                                   <option value="{{$type->id}}" {{($type->id == $value->typecoa_id) ? 'selected':''}}>{{$type->name}}</option>
                                 @endforeach
@@ -216,16 +219,47 @@ $(document).ready(function() {
                     <div class="panel-body">
                       <div class="table-responsive">
                         <table class="table table-bordered" id="tablePajak">
+                          @foreach($pajak->setup_details as $key=>$value)
                           <tr id="rowpajak">
-                            <input type="hidden" name="detailsetup[]" value="{{$pajak->id}}">
+                            <input type="hidden" name="detailsetup[]" value="{{$value->id}}">
                             <td>
                               <select class="form-control select2" name="typepajak" data-placeholder="Choose Type  Chart Of Account ..." required>
+                                <option></option>
                                 @foreach($types as $type)
                                   <option value="{{$type->id}}" {{($type->id == $value->typecoa_id) ? 'selected':''}}>{{$type->name}}</option>
                                 @endforeach
                               </select>
                             </td>
-                          </tr>  
+                          </tr>
+                          @endforeach  
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="col-sm-10 col-sm-offset-1">
+                  <div class="panel panel-color panel-inverse">
+                    <div class="panel-heading">
+                      <h3 class="panel-title">COA LABA BERJALAN</h3>
+                    </div>
+                    <div class="panel-body">
+                      <div class="table-responsive">
+                        <table class="table table-bordered" id="labaBerjalan">
+                          @foreach($laba->setup_details as $key=>$value)
+                          <tr id="rowlaba">
+                            <input type="hidden" name="detailsetup[]" value="{{$value->id}}">
+                            <td>
+                              <select class="form-control select2" name="labacoa" data-placeholder="Choose Chart Of Account Net Income ..." required>
+                                <option></option>
+                                @foreach($coas as $coa)
+                                  <option value="{{$coa->id}}" {{($coa->id == $value->coa_id) ? 'selected':''}}>{{$coa->code}} - {{$coa->name}}</option>
+                                @endforeach
+                              </select>
+                            </td>
+                          </tr>
+                          @endforeach  
                         </table>
                       </div>
                     </div>

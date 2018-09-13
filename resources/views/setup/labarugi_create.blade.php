@@ -197,6 +197,31 @@ $(document).ready(function() {
                 </div>
               </div>
               <div class="form-group">
+                <div class="col-sm-10 col-sm-offset-1">
+                  <div class="panel panel-color panel-inverse">
+                    <div class="panel-heading">
+                      <h3 class="panel-title">LABA BERJALAN</h3>
+                    </div>
+                    <div class="panel-body">
+                      <div class="table-responsive">
+                        <table class="table table-bordered" id="labaBerjalan">
+                          <tr id="rowlaba">
+                            <td>
+                              <select class="form-control select2" name="labacoa" data-placeholder="Choose Chart Of Account Net Income ..." required>
+                                <option></option>
+                                @foreach($coas as $coa)
+                                  <option value="{{$coa->id}}">{{$coa->code}}-{{$coa->name}}</option>
+                                @endforeach
+                              </select>
+                            </td>
+                          </tr>  
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
                 <div class="col-sm-offset-9 col-sm-3">
                   <button type="submit" class="btn btn-lg btn-primary">
                     Submit
