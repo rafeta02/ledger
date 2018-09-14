@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('tab-title')
-<title>Accounting Korina</title>
+<title>Accounting - Home</title>
 @endsection
 
 @section('page-title')
@@ -24,7 +24,7 @@
 @endsection
 
 @section('subtitle')
-<p class="text-muted page-title-alt">Welcome Admin, <span class="text-pink">07 Agustus 2018</span></p>
+<p class="text-muted page-title-alt">Welcome, {{ Auth::user()->name }}</p>
 @endsection
 
 @section('content')
@@ -49,108 +49,6 @@
         <i class="md md-account-child text-info"></i>
         <h2 class="m-0 text-dark counter font-600">18</h2>
         <div class="text-muted m-t-5">New Agent <span class="text-pink">(not verified)</span></div>
-      </div>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col-lg-4">
-      <div class="card-box">
-        <h4 class="m-t-0 m-b-20 header-title"><b>New Transactions</b></h4>
-        <div class="nicescroll mx-box">
-          <ul class="list-unstyled transaction-list m-r-5">
-            <li>
-              <i class="ti-download text-success"></i>
-              <span class="tran-text">Advertising</span>
-              <span class="pull-right text-success tran-price">+$230</span>
-              <span class="pull-right text-muted">07/09/2015</span>
-              <span class="clearfix"></span>
-            </li>
-
-            <li>
-              <i class="ti-upload text-danger"></i>
-              <span class="tran-text">Support licence</span>
-              <span class="pull-right text-danger tran-price">-$965</span>
-              <span class="pull-right text-muted">07/09/2015</span>
-              <span class="clearfix"></span>
-            </li>
-
-            <li>
-              <i class="ti-download text-success"></i>
-              <span class="tran-text">Extended licence</span>
-              <span class="pull-right text-success tran-price">+$830</span>
-              <span class="pull-right text-muted">07/09/2015</span>
-              <span class="clearfix"></span>
-            </li>
-
-            <li>
-              <i class="ti-download text-success"></i>
-              <span class="tran-text">Advertising</span>
-              <span class="pull-right text-success tran-price">+$230</span>
-              <span class="pull-right text-muted">05/09/2015</span>
-              <span class="clearfix"></span>
-            </li>
-
-            <li>
-              <i class="ti-upload text-danger"></i>
-              <span class="tran-text">New plugins added</span>
-              <span class="pull-right text-danger tran-price">-$452</span>
-              <span class="pull-right text-muted">05/09/2015</span>
-              <span class="clearfix"></span>
-            </li>
-
-            <li>
-              <i class="ti-download text-success"></i>
-              <span class="tran-text">Google Inc.</span>
-              <span class="pull-right text-success tran-price">+$230</span>
-              <span class="pull-right text-muted">04/09/2015</span>
-              <span class="clearfix"></span>
-            </li>
-
-            <li>
-              <i class="ti-upload text-danger"></i>
-              <span class="tran-text">Facebook Ad</span>
-              <span class="pull-right text-danger tran-price">-$364</span>
-              <span class="pull-right text-muted">03/09/2015</span>
-              <span class="clearfix"></span>
-            </li>
-
-            <li>
-              <i class="ti-download text-success"></i>
-              <span class="tran-text">New sale</span>
-              <span class="pull-right text-success tran-price">+$230</span>
-              <span class="pull-right text-muted">03/09/2015</span>
-              <span class="clearfix"></span>
-            </li>
-
-            <li>
-              <i class="ti-download text-success"></i>
-              <span class="tran-text">Advertising</span>
-              <span class="pull-right text-success tran-price">+$230</span>
-              <span class="pull-right text-muted">29/08/2015</span>
-              <span class="clearfix"></span>
-            </li>
-
-            <li>
-              <i class="ti-upload text-danger"></i>
-              <span class="tran-text">Support licence</span>
-              <span class="pull-right text-danger tran-price">-$854</span>
-              <span class="pull-right text-muted">27/08/2015</span>
-              <span class="clearfix"></span>
-            </li>
-          </ul>
-        </div>
-      </div>
-
-    </div>
-    <div class="col-lg-8">
-      <div class="card-box">
-        <h4 class="text-dark header-title m-t-0">Number of Ticket Sold</h4>
-        <div class="row">
-          <div class="col-md-12">
-            <div id="morris-area-with-dotted" style="height: 300px;"></div>
-          </div>
-        </div>
       </div>
     </div>
   </div>

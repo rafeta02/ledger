@@ -47,7 +47,7 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
+    {   
         $this->validate($request, [
             'name'=>'required|max:120',
             'email'=>'required|email|unique:users',
@@ -59,7 +59,6 @@ class UserController extends Controller
         $roles = $request['roles'];
 
         if (isset($roles)) {
-
             foreach ($roles as $role) {
             $role_r = Role::where('id', '=', $role)->firstOrFail();            
             $user->assignRole($role_r);

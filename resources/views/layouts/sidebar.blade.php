@@ -3,7 +3,7 @@
     <div id="sidebar-menu">
       <ul>
         <li class="active">
-          <a href="#" class="waves-effect"><i class="ti-home"></i> <span> Home </span></a>
+          <a href="{{route('home')}}" class="waves-effect"><i class="ti-home"></i> <span> Home </span></a>
         </li>
 
         <li class="has_sub">

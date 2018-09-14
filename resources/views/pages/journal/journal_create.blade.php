@@ -115,13 +115,13 @@ function inputKredit(){
               <div class="form-group">
                 <label class="col-sm-2 col-sm-offset-1 control-label" style="text-align: left;">Journal Date</label>
                 <div class="col-sm-4">
-                  <input type="text" id="date" name="date" class="form-control" required="" placeholder="Journal Date" />
+                  <input type="text" id="date" name="date" class="form-control" required="" placeholder="Journal Date" tabindex="1" />
                 </div>
               </div>
               <div class="form-group">
                 <label class="col-sm-2 col-sm-offset-1 control-label" style="text-align: left;">Description</label>
                 <div class="col-sm-8">
-                   <textarea name="description" class="form-control" rows="5" required=""></textarea>
+                   <textarea name="description" class="form-control" rows="5" required="" tabindex="2"></textarea>
                 </div>
               </div>
               <div class="form-group">
@@ -194,7 +194,7 @@ function inputKredit(){
               </div>
               <div class="form-group">
                 <div class="col-sm-offset-8 col-sm-4">
-                  <button type="submit" class="btn btn-lg btn-primary">
+                  <button type="submit" class="btn btn-lg btn-primary" tabindex="3">
                     Submit
                   </button>
                 </div>

@@ -54,7 +54,7 @@ $(document).ready(function() {
         <div class="row">
           <div class="col-sm-2"><h4>Opening Balance</h4></div>
           <div class="col-sm-1"><h4>:</h4></div>
-          <div class="col-sm-5"><h4>{{number_format(abs($ledger->closing_balance),0,",", ".")}}</h4></div>
+          <div class="col-sm-5"><h4>{{number_format(abs($opening),0,",", ".")}}</h4></div>
         </div>
       </div>
   	</div>
@@ -79,7 +79,7 @@ $(document).ready(function() {
           </thead>
           <tbody>
             @php
-              $saldo = $ledger->closing_balance;
+              $saldo = $opening;
               $totdebet = 0;
               $totkredit = 0;
             @endphp
@@ -120,7 +120,7 @@ $(document).ready(function() {
             {{csrf_field()}}
             <input type="hidden" name="period" value="{{$periodFilter}}">
             <input type="hidden" name="coa_id" value="{{$coa->id}}">
-            <input type="hidden" name="opening_balance" value="{{$ledger->closing_balance}}">
+            <input type="hidden" name="opening_balance" value="{{$opening}}">
             <input type="hidden" name="debet_total" value="{{$totdebet}}">
             <input type="hidden" name="kredit_total" value="{{$totkredit}}">
             <input type="hidden" name="closing_balance" value="{{$saldo}}">

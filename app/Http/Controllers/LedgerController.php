@@ -7,6 +7,8 @@ use App\Coa;
 use App\Journal;
 use App\JournalDetail;
 use App\Ledger;
+use App\Setup;
+use App\SetupDetail;
 use Carbon\Carbon;
 use Auth;
 use Session;
@@ -35,12 +37,15 @@ class LedgerController extends Controller
         $like = $periodNow."-%";
         $periodText = $now->format('F Y');
 
-        $coas = Coa::orderBy('code')->paginate(15);
+        $laba = Setup::with('setup_details')->where('name', 'Labarugi')->where('list', 'Laba_Berjalan')->first();
+        foreach ($laba->setup_details as $key => $value) {
+            $laba_coa[] = $value->coa_id;
+        }
 
-        //dd($coas);
+        $coas = Coa::orderBy('code')->whereNotIn('id', $laba_coa)->paginate(15);
+
         foreach ($coas as $coa) {
             $coa = Coa::find($coa->id);
-            //dd($coa);
             $coa_id[] = $coa->id;
 
             if($coa->children != null){
@@ -93,7 +98,10 @@ class LedgerController extends Controller
 
         $ledger = Ledger::where('period', $periodBefore)->where('coa_id', $coa->id)->first();
         if($ledger == null){
-            return redirect()->route('ledger.index')->with('errorMsg', "Ledger Not Found");
+            $opening = 0;
+            //return redirect()->route('ledger.index')->with('errorMsg', "Ledger Not Found");
+        }else{
+            $opening = $ledger->closing_balance; 
         }
 
         if($coa->children != null){
@@ -106,12 +114,11 @@ class LedgerController extends Controller
                     $q->where('date', 'like', $like)->isPosted();
                 })->whereIn('coa_id', $coa_id)->get();
 
-        $opening = $ledger->closing_balance; 
         $debet = $details->sum('debet');
         $kredit = $details->sum('kredit');
         $a = $opening + ($debet - $kredit);
-        //dd($a);        
-        return view('pages.ledger.ledger_view', compact('details', 'coa', 'coas', 'ledger', 'periodText', 'periodFilter'));
+
+        return view('pages.ledger.ledger_view', compact('details', 'coa', 'coas', 'periodText', 'periodFilter', 'opening'));
     }
 
     public function export(Request $request)
