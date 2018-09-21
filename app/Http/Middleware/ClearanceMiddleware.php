@@ -95,6 +95,22 @@ class ClearanceMiddleware {
             }
         }
 
+        if ($request->is('journal/view/*')) {
+            if (!Auth::user()->hasPermissionTo('Filter_Journal')) {
+                abort('401');
+            } else {
+                return $next($request);
+            }
+        }
+
+        if ($request->is('journal/filter')) {
+            if (!Auth::user()->hasPermissionTo('Filter_Journal')) {
+                abort('401');
+            } else {
+                return $next($request);
+            }
+        }
+
         //NERACA LABARUGI
         if ($request->is('neraca')) {
             if (!Auth::user()->hasPermissionTo('View_Neraca')) {

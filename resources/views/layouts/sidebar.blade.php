@@ -23,6 +23,9 @@
             @can('Posting_Journal')
             <li><a href="{{route('journal.posting')}}">Journal Posting</a></li>
             @endcan
+            @can('Filter_Journal')
+            <li><a href="{{route('journal.filter')}}">Filter Journal</a></li>
+            @endcan
           </ul>
         </li>
         <li class="has_sub">
