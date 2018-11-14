@@ -12,7 +12,8 @@
         "laravel/tinker": "^1.0",
         "laravelcollective/html": "^5.4.0",
         "maatwebsite/excel": "~2.1.0",
-        "spatie/laravel-permission": "^2.18"
+        "spatie/laravel-permission": "^2.18",
+        "yajra/laravel-datatables-oracle": "~8.0"
     },
     "require-dev": {
         "filp/whoops": "^2.0",

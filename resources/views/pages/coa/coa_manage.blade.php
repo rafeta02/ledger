@@ -12,6 +12,9 @@
 @section('head')
 <link href="{{ url('/') }}/admin-assets/assets/plugins/bootstrap-table/css/bootstrap-table.min.css" rel="stylesheet" type="text/css" />
 <link href="{{ url('/') }}/admin-assets/assets/plugins/custombox/css/custombox.css" rel="stylesheet">
+
+<link href="{{ url('/') }}/admin-assets/assets/plugins/datatables/jquery.dataTables.min.css" rel="stylesheet">
+<link href="{{ url('/') }}/admin-assets/assets/plugins/datatables/dataTables.bootstrap.min.css" rel="stylesheet">
 @endsection
 
 @section('scripts')
@@ -19,6 +22,30 @@
 <script src="{{ url('/') }}/admin-assets/assets/pages/jquery.bs-table.js"></script>
 <script src="{{ url('/') }}/admin-assets/assets/plugins/custombox/js/custombox.min.js"></script>
 <script src="{{ url('/') }}/admin-assets/assets/plugins/custombox/js/legacy.min.js"></script>
+<script src="{{ url('/') }}/admin-assets/assets/plugins/custombox/js/custombox.min.js"></script>
+
+<script src="{{ url('/') }}/admin-assets/assets/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="{{ url('/') }}/admin-assets/assets/plugins/datatables/dataTables.bootstrap.js"></script>
+@endsection
+
+@section('custom-scripts')
+<script type="text/javascript">
+  $(function() {
+      $('#table-data1').DataTable({
+          processing : true,
+          serverSide : true,
+          ajax : '{{ url('coa/datatables') }}',
+          columns: [
+              { data: 'code', name: 'code'},
+              { data: 'name', name: 'name' },
+              { data: 'type', name: 'type' },
+              { data: 'group', name: 'group' },
+              { data: 'parent', name: 'parent', orderable: false },
+              { data: 'action', name: 'action', orderable: false, searchable: false }
+          ]
+      });
+  });
+</script>
 @endsection
 
 @section('content')
@@ -36,50 +63,64 @@
         @endcan 
         <a href="{{ route('coa.export') }}" class="btn btn-pink btn-rounded waves-effect waves-light">Export COA</a>
         <br><br>
-        <table data-toggle="table" class="table-bordered ">
-        <thead>
-          <tr>
-            <th data-field="code" data-sortable="true" class="text-center">Account Code</th>
-            <th data-field="name" data-sortable="true" class="text-center">Account Name</th>
-            <th data-field="type" class="text-center">Type</th>
-            <th data-field="group" class="text-center">Group</th>
-            <th data-field="parent" class="text-center">Parent Code</th>
-            <th data-field="action" class="text-center">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          @foreach($coas as $data)
-          <tr>
-            <td>{{ $data->code }}</td>
-            <td class="text-left">{{ $data->name }}</td>
-            <td>{{ $data->type_name }}</td>
-            <td>{{ $data->group }}</td>
-            <td>
-              @if(isset($data->parent))
-                {{$data->parent->code}}
-              @else
-                -
-              @endif
-            </td>
-            <td>
-              @can('Edit_Coa')
-                <a href="{{route('coa.edit', $data->id)}}" class="btn btn-success btn-custom waves-effect waves-light btn-xs">edit</a>
-              @endcan
-              @can('Delete_Coa')
-              <form action="{{ route('coa.destroy' , $data->id)}}" method="POST">
-                <input name="_method" type="hidden" value="DELETE">
-                {{ csrf_field() }}
-                <button type="submit" onclick="return confirm('Are you sure to delete?')" class="btn btn-danger btn-custom waves-effect waves-light btn-xs">delete</button>
-              </form>
-              @endcan
-            </td>
-          </tr>
-          @endforeach
-        </tbody>
-      </table>
+{{--         <table data-toggle="table" class="table-bordered ">
+          <thead>
+            <tr>
+              <th data-field="code" data-sortable="true" class="text-center">Account Code</th>
+              <th data-field="name" data-sortable="true" class="text-center">Account Name</th>
+              <th data-field="type" class="text-center">Type</th>
+              <th data-field="group" class="text-center">Group</th>
+              <th data-field="parent" class="text-center">Parent Code</th>
+              <th data-field="action" class="text-center">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            @foreach($coas as $data)
+            <tr>
+              <td>{{ $data->code }}</td>
+              <td class="text-left">{{ $data->name }}</td>
+              <td>{{ $data->type_name }}</td>
+              <td>{{ $data->group }}</td>
+              <td>
+                @if(isset($data->parent))
+                  {{$data->parent->code}}
+                @else
+                  -
+                @endif
+              </td>
+              <td>
+                @can('Edit_Coa')
+                  <a href="{{route('coa.edit', $data->id)}}" class="btn btn-success btn-custom waves-effect waves-light btn-xs">edit</a>
+                @endcan
+                @can('Delete_Coa')
+                <form action="{{ route('coa.destroy' , $data->id)}}" method="POST">
+                  <input name="_method" type="hidden" value="DELETE">
+                  {{ csrf_field() }}
+                  <button type="submit" onclick="return confirm('Are you sure to delete?')" class="btn btn-danger btn-custom waves-effect waves-light btn-xs">delete</button>
+                </form>
+                @endcan
+              </td>
+            </tr>
+            @endforeach
+          </tbody>
+        </table>
       <div class="text-center"> 
         {{ $coas->links() }}
-      </div>
+      </div> --}}
+        <table id="table-data1" class="table table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
+          <thead>
+            <tr>
+              <th>Account Code</th>
+              <th>Account Name</th>
+              <th>Type</th>
+              <th>Group</th>
+              <th>Parent Code</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
     </div>
   </div>
   </div>

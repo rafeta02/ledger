@@ -42,6 +42,7 @@ Route::middleware(['auth', 'clearance'])->group(function () {
 	Route::get('/coa/import', 'CoaController@import')->name('coa.import');
 	Route::post('/coa/import', 'CoaController@importPost')->name('coa.importpost');
 	Route::get('/coa/export', 'CoaController@export')->name('coa.export');
+	Route::get('/coa/datatables', 'CoaController@datatables')->name('coa.datatables');
 	Route::get('/coa/examplexport', 'CoaController@exportExample')->name('coa.exportexample');
 	//Route::get('/coa/latihanexport', 'CoaController@exportLatihan')->name('coa.exportlatihan');
 	

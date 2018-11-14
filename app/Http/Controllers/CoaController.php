@@ -12,6 +12,7 @@ use Auth;
 use Session;
 use Excel;
 use File;
+use DataTables;
 
 
 class CoaController extends Controller
@@ -25,7 +26,50 @@ class CoaController extends Controller
     {
         $coas = Coa::orderBy('code')->with('children', 'parent')->paginate(15);
         return view('pages.coa.coa_manage', compact('coas'));
-    }   
+    }
+
+    public function datatables(Request $request) {
+        $select = Coa::orderBy('code')->with('children', 'parent')->get();
+
+        $data = Datatables::of($select)
+            ->addColumn('action', function($select) {
+                $action = '';
+
+                if(auth()->user()->can('Edit_Coa')){
+                    $action = $action.'<a href="'.route('coa.edit', $select->id).'" class="btn btn-success btn-custom waves-effect waves-light btn-xs">edit</a>';
+                }
+                if(auth()->user()->can('Delete_Coa')){
+                    $action = $action.'<form action="'.route('coa.destroy' , $select->id).'" method="POST">
+                    <input name="_method" type="hidden" value="DELETE">
+                    '.csrf_field().'
+                    <button type="submit" onclick="return confirm(Are you sure to delete?)" class="btn btn-danger btn-custom waves-effect waves-light btn-xs">delete</button>
+                    </form>';
+                }
+                return $action;
+            })
+            ->editColumn('code', function($select) {
+                return $select->code;
+            })
+            ->editColumn('name', function($select) {
+                return $select->name;
+            })
+            ->editColumn('type', function($select) {
+                return $select->type_name;
+            })
+            ->editColumn('group', function($select) {
+                return $select->group;
+            })
+            ->editColumn('parent', function($select) {
+                if(isset($select->parent)){
+                    $parent = $select->parent->code;
+                }else{
+                    $parent = "-";
+                }
+                return $parent;
+            })
+            ->rawColumns(['action']);
+        return $data->make(true);
+    }
 
     /**
      * Show the form for creating a new resource.
