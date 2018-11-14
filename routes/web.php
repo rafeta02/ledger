@@ -72,6 +72,12 @@ Route::middleware(['auth', 'clearance'])->group(function () {
 	Route::resource('neraca', 'NeracaController');
 	Route::resource('labarugi', 'LabarugiController');
 
+
+	Route::post('/opening/update-balance/{id}', 'OpeningBalanceController@updateBalance')->name('opening.updatebalance');
+	Route::resource('opening', 'OpeningBalanceController')->only([
+		'index'
+	]);
+
 });
 
 

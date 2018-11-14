@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Coa;
 use App\TypeCoa;
 use App\Setup;
+use App\OpeningBalance;
 use App\SetupDetail;
 use Carbon\Carbon;
 use App\Ledger;
@@ -21,7 +22,28 @@ class OpeningBalanceController extends Controller
      */
     public function index()
     {
-        //
+        $periodNow = Carbon::Now()->format('Y-m');
+        $coas = Coa::get()->pluck('id');
+        foreach ($coas as $value) {
+            $opening = OpeningBalance::firstOrCreate([
+                'coa_id' => $value
+            ], [
+                'period' => $periodNow,
+                'opening_balance' => 0
+            ]);   
+        }
+        //dd($coas);
+        $balance = OpeningBalance::with('coa')->paginate(15);
+        return view('pages.coa.coa_opening_balance', compact('balance'));
+    }
+
+    public function updateBalance(Request $request, $id) {
+        OpeningBalance::find($id)->update([$request->name => $request->value]);
+        return response()->json(['success'=>'done']);
+    }
+
+    public function initBalance(){
+
     }
 
     /**

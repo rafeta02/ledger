@@ -30,6 +30,7 @@
         @can('Create_Coa')
           <a href="{{ route('coa.create') }}" class="btn btn-pink btn-rounded waves-effect waves-light">Create New COA</a>
         @endcan 
+        <a href="{{ route('opening.index') }}" class="btn btn-pink btn-rounded waves-effect waves-light">Opening Balance</a>
         @can('Import_Coa')
         <a href="{{ route('coa.import') }}" class="btn btn-pink btn-rounded waves-effect waves-light">Import COA</a>
         @endcan 
