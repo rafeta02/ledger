@@ -63,7 +63,7 @@
                                     <tr>
                                         <td width="25%"><h4>Journal Date</h4></td>
                                         <td width="10%"><h4>:</h4></td>
-                                        <td><h4>{{ \Carbon\Carbon::parse($journal->date)->format('d M Y') }}</h4></td>
+                                        <td><h4>{{ \Carbon\Carbon::parse($journal->date)->format('d F Y') }}</h4></td>
                                     </tr>
                                     <tr>
                                         <td><h4>Description</h4></td>

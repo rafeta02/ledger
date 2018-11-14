@@ -124,76 +124,82 @@ function inputKredit(){
                    <textarea name="description" class="form-control" rows="5" required="" tabindex="2"></textarea>
                 </div>
               </div>
-              <div class="form-group">
-                <div class="col-sm-10 col-sm-offset-1">
-                  <div class="panel panel-color panel-info">
-                    <div class="panel-heading">
-                      <h3 class="panel-title">DEBET</h3>
-                    </div>
-                    <div class="panel-body">
-                      <div class="table-responsive">
-                        <table class="table table-bordered" id="tableDebet">
-                          <tr id="rowdebet0">
-                            <td>
-                              <select class="form-control select2" name="namadebet[]" data-placeholder="Choose Chart Of Account ..." required>
-                                <option></option>
-                                @foreach($coas as $coa)
-                                  <option value="{{$coa->id}}">{{$coa->code}}-{{$coa->name}}</option>
-                                @endforeach
-                              </select>
-                            </td>
-                            <td><input id="debet0" type="number" value="0" min="0" data-parsley-type="number" name="debet[]" placeholder="Enter Debet Amount" class="form-control" required="" onkeyup="inputDebet()" /></td>
-                            <td width="10%"><button type="button" name="addDebet" id="addDebet" class="btn btn-success">+</button></td>
-                          </tr>  
-                        </table>
-                        <table class="table">
-                          <tr>
-                            <td width="45%" align="right"><strong style="font-size: 20px;">Total : </strong></td>
-                            <td width="45%" align="right"><strong style="font-size: 20px;">Rp. <input id="totaldebet" name="totaldebet" type="number" value="0" min="0" data-parsley-equalto="#totalkredit" readonly="" style="text-align: right;" /></strong></td>
-                            <td width="10%"></td>
-                          </tr>  
-                        </table>
-                      </div> 
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <div class="col-sm-12">
+                      <div class="panel panel-color panel-info">
+                        <div class="panel-heading">
+                          <h3 class="panel-title">DEBET</h3>
+                        </div>
+                        <div class="panel-body">
+                          <div class="table-responsive">
+                            <table class="table table-bordered" id="tableDebet">
+                              <tr id="rowdebet0">
+                                <td>
+                                  <select class="form-control select2" name="namadebet[]" data-placeholder="Choose Chart Of Account ..." required>
+                                    <option></option>
+                                    @foreach($coas as $coa)
+                                      <option value="{{$coa->id}}">{{$coa->code}}-{{$coa->name}}</option>
+                                    @endforeach
+                                  </select>
+                                </td>
+                                <td><input id="debet0" type="number" value="0" min="0" data-parsley-type="number" name="debet[]" placeholder="Enter Debet Amount" class="form-control" required="" onkeyup="inputDebet()" /></td>
+                                <td width="10%"><button type="button" name="addDebet" id="addDebet" class="btn btn-success">+</button></td>
+                              </tr>  
+                            </table>
+                            <table class="table">
+                              <tr>
+                                <td width="45%" align="right"><strong style="font-size: 20px;">Total : </strong></td>
+                                <td width="45%" align="right"><strong style="font-size: 20px;">Rp. <input id="totaldebet" name="totaldebet" type="number" value="0" min="0" data-parsley-equalto="#totalkredit" readonly="" style="text-align: right;" /></strong></td>
+                                <td width="10%"></td>
+                              </tr>  
+                            </table>
+                          </div> 
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-              <div class="form-group">
-                <div class="col-sm-10 col-sm-offset-1">
-                  <div class="panel panel-color panel-danger">
-                    <div class="panel-heading">
-                      <h3 class="panel-title">KREDIT</h3>
-                    </div>
-                    <div class="panel-body">
-                      <div class="table-responsive">
-                        <table class="table table-bordered" id="tableKredit">
-                          <tr id="rowkredit0">
-                            <td>
-                              <select class="form-control select2" name="namakredit[]" data-placeholder="Choose Chart Of Account ..." required>
-                                <option></option>
-                                @foreach($coas as $coa)
-                                  <option value="{{$coa->id}}">{{$coa->code}}-{{$coa->name}}</option>
-                                @endforeach
-                              </select>
-                            </td>
-                            <td><input id="kredit0" type="number" value="0" min="0" data-parsley-type="number" name="kredit[]" placeholder="Enter Kredit Amount" class="form-control" required="" onkeyup="inputKredit()" /></td>
-                            <td width="10%"><button type="button" name="addKredit" id="addKredit" class="btn btn-success">+</button></td>
-                          </tr>  
-                        </table>
-                        <table class="table">
-                          <tr>
-                            <td width="45%" align="right"><strong style="font-size: 20px;">Total : </strong></td>
-                            <td width="45%" align="right"><strong style="font-size: 20px;">Rp. <input id="totalkredit" name="totalkredit" type="number" value="0" min="0" data-parsley-equalto="#totaldebet" readonly="" style="text-align: right;" /></strong></td>
-                            <td width="10%"></td>
-                          </tr>  
-                        </table>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <div class="col-sm-12">
+                      <div class="panel panel-color panel-danger">
+                        <div class="panel-heading">
+                          <h3 class="panel-title">KREDIT</h3>
+                        </div>
+                        <div class="panel-body">
+                          <div class="table-responsive">
+                            <table class="table table-bordered" id="tableKredit">
+                              <tr id="rowkredit0">
+                                <td>
+                                  <select class="form-control select2" name="namakredit[]" data-placeholder="Choose Chart Of Account ..." required>
+                                    <option></option>
+                                    @foreach($coas as $coa)
+                                      <option value="{{$coa->id}}">{{$coa->code}}-{{$coa->name}}</option>
+                                    @endforeach
+                                  </select>
+                                </td>
+                                <td><input id="kredit0" type="number" value="0" min="0" data-parsley-type="number" name="kredit[]" placeholder="Enter Kredit Amount" class="form-control" required="" onkeyup="inputKredit()" /></td>
+                                <td width="10%"><button type="button" name="addKredit" id="addKredit" class="btn btn-success">+</button></td>
+                              </tr>  
+                            </table>
+                            <table class="table">
+                              <tr>
+                                <td width="45%" align="right"><strong style="font-size: 20px;">Total : </strong></td>
+                                <td width="45%" align="right"><strong style="font-size: 20px;">Rp. <input id="totalkredit" name="totalkredit" type="number" value="0" min="0" data-parsley-equalto="#totaldebet" readonly="" style="text-align: right;" /></strong></td>
+                                <td width="10%"></td>
+                              </tr>  
+                            </table>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="form-group">
-                <div class="col-sm-offset-8 col-sm-4">
+              <div class="row">
+                <div class="col-md-12 text-center">
                   <button type="submit" class="btn btn-lg btn-primary" tabindex="3">
                     Submit
                   </button>
