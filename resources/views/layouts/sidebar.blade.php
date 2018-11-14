@@ -11,6 +11,7 @@
           <ul class="list-unstyled">
             <a href="{{route('coa.index')}}">Manage Chart Of Account</a>
             <a href="{{route('type-coa.index')}}">Manage Type of COA</a>
+            <a href="{{route('opening.index')}}">Opening Balance of COA</a>
           </ul>
         </li>
 
