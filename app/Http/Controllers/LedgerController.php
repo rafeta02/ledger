@@ -9,6 +9,7 @@ use App\JournalDetail;
 use App\Ledger;
 use App\Setup;
 use App\SetupDetail;
+use App\OpeningBalance;
 use Carbon\Carbon;
 use Auth;
 use Session;
@@ -56,7 +57,12 @@ class LedgerController extends Controller
 
             $ledger = Ledger::where('period', $periodBefore)->where('coa_id', $coa->id)->first();
             if($ledger == null){
-                $opening_balance = 0;
+                $op_balance = OpeningBalance::where('period', $periodNow)->where('coa_id', $coa->id)->first();
+                if($op_balance == null){
+                    $opening_balance = 0;
+                }else{
+                    $opening_balance = $op_balance->opening_balance;
+                }
             }else{
                 $opening_balance = $ledger->closing_balance;
             }
@@ -92,13 +98,18 @@ class LedgerController extends Controller
         $karbon = Carbon::createFromFormat('Y-m', $periodFilter);
         $periodBefore = $karbon->subMonth(1)->format('Y-m');
         $periodText = Carbon::createFromFormat('Y-m', $periodFilter)->format('M Y');
-
         $coa = Coa::find($coaFilter);
         $coa_id[] = $coa->id;
 
         $ledger = Ledger::where('period', $periodBefore)->where('coa_id', $coa->id)->first();
         if($ledger == null){
-            $opening = 0;
+            $op_balance = OpeningBalance::where('period', Carbon::now()->format('Y-m'))->where('coa_id', $coa->id)->first();
+            if($op_balance == null){
+                $opening = 0;
+            }else{
+                $opening = $op_balance->opening_balance;
+            }
+
             //return redirect()->route('ledger.index')->with('errorMsg', "Ledger Not Found");
         }else{
             $opening = $ledger->closing_balance; 
@@ -261,7 +272,13 @@ class LedgerController extends Controller
 
             $ledger = Ledger::where('period', $periodBefore)->where('coa_id', $coa->id)->first();
             if($ledger == null){
-                $opening_balance = 0;
+                $op_balance = OpeningBalance::where('period', Carbon::now()->format('Y-m'))->where('coa_id', $coa->id)->first();
+                if($op_balance == null){
+                    $opening_balance = 0;
+                }else{
+                    $opening_balance = $op_balance->opening_balance;
+                }
+                
             }else{
                 $opening_balance = $ledger->closing_balance;
             }
