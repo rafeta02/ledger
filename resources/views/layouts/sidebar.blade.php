@@ -11,7 +11,6 @@
           <ul class="list-unstyled">
             <a href="{{route('coa.index')}}">Manage Chart Of Account</a>
             <a href="{{route('type-coa.index')}}">Manage Type of COA</a>
-            <a href="{{route('opening.index')}}">Opening Balance of COA</a>
           </ul>
         </li>
 
@@ -51,6 +50,7 @@
         <li class="has_sub">
           <a class="waves-effect"><i class=" ti-settings"></i><span> Setup </span> <span class="menu-arrow"></span></a>
           <ul class="list-unstyled">
+            <li><a href="{{route('opening.index')}}">Setup Opening Balance</a></li>
             <li><a href="{{route('setup.labarugi.index')}}">Setup Labarugi</a></li>
             <li><a href="{{route('setup.neraca.index')}}">Setup Neraca</a></li>
           </ul>
